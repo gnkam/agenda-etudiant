@@ -1,0 +1,5 @@
+univ_savoie_edt:
+    resource: "@UnivSavoieEdtBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
