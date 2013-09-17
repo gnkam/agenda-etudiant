@@ -11,7 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Gnkam\Univ\Savoie\Edt\Formalizer;
 
 /**
-* @Route("/api")
+* @Route("/api/edt")
 */
 class ApiController extends Controller
 {

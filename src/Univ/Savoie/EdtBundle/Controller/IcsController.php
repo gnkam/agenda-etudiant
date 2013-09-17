@@ -14,12 +14,13 @@ use Eluceo\iCal\Component\Event;
 use DateTime;
 
 /**
-* @Route("/ics")
+* @Route("/ics/edt")
 */
 class IcsController extends Controller
 {
 	/**
-	* @Route("/group/{id}")
+	* @Route("/group/{id}.ics")
+    * @Method({"GET"})
 	*/
 	public function groupIdAction($id)
 	{
@@ -35,7 +36,7 @@ class IcsController extends Controller
 		
 		$headers = array(
 			'Content-Type' => 'text/calendar; charset=utf-8',
-			'Content-Disposition' => 'attachment; filename="cal.ics'
+			'Content-Disposition' => 'attachment; filename="'.$id.'.ics'
 		);
 	
 		$vCalendar = new Calendar('Gnukam');
@@ -50,11 +51,52 @@ class IcsController extends Controller
 			$vEvent->setDtStart($start);
 			$vEvent->setDtEnd($end);
 			$vEvent->setSummary($name.$avec);
+			if(!empty($event['place']))
+			{
+				$vEvent->setLocation($event['place']);
+			}
+			$description = $this->eventGroupDescription($event);
+			if(!empty($description))
+			{
+				$vEvent->setDescription($description);
+			}
 			$vEvent->setUseTimezone(true);
 			$vCalendar->addEvent($vEvent);
 		}
 		
 		$calendar =  $vCalendar->render();
 		return new Response($calendar, 200, $headers);
+	}
+	
+	protected function eventGroupDescription($event)
+	{
+		$description = '';
+		$name = (empty($event['name'])) ? $event['code'] : $event['name'];
+		$teacher = (empty($event['teacher'])) ? null : $event['teacher'];
+		if(!empty($event['type']))
+		{
+			$description .= strtoupper($event['type']);
+			if(!empty($name))
+			{
+				$description .= ' de ';
+			}
+		}
+		if(!empty($name))
+		{
+			$description .= $name;
+			if(null!==$teacher)
+			{
+				$description .= ' avec ';
+			}
+		}
+		if(null!==$teacher)
+		{
+			$description .= $teacher;
+		}
+		if(!empty($event['seats']))
+		{
+			$description .= ' ('.$event['seats'].' places)';
+		}
+		return $description;
 	}
 }
