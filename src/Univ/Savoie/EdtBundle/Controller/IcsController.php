@@ -29,7 +29,7 @@ class IcsController extends Controller
 		$group = $api->groupIdAction($id);
 		if($group->getStatusCode() !== 200)
 		{
-			return Response('Calendar not found', 404);
+			return new Response('Calendar not found', 404);
 		}
 		
 		$json = json_decode($group->getContent(), true);
