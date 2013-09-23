@@ -1,3 +1,8 @@
+crous_grenoble_menu:
+    resource: "@CrousGrenobleMenuBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 univ_savoie_edt:
     resource: "@UnivSavoieEdtBundle/Controller/"
     type:     annotation

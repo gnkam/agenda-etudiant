@@ -20,6 +20,7 @@
         "sensio/generator-bundle": "2.3.*",
         "incenteev/composer-parameter-handler": "~2.0",
         "gnkam/univ-savoie-edt": "*@dev",
+        "gnkam/univ-savoie-menu": "*@dev",
         "eluceo/ical": "*@dev"
     },
     "scripts": {
