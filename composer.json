@@ -21,7 +21,8 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "gnkam/univ-savoie-edt": "*@dev",
         "gnkam/univ-savoie-menu": "*@dev",
-        "eluceo/ical": "*@dev"
+        "eluceo/ical": "*@dev",
+        "sabre/vobject": "3.*"
     },
     "scripts": {
         "post-install-cmd": [

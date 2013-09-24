@@ -8,10 +8,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
-use Eluceo\iCal\Component\Calendar;
-use Eluceo\iCal\Component\Event;
+use Sabre\VObject\Component\VCalendar;
 
 use DateTime;
+use DateTimeZone;
 
 /**
 * @Route("/ics/menu")
@@ -38,25 +38,34 @@ class IcsController extends Controller
 			'Content-Type' => 'text/calendar; charset=utf-8',
 			'Content-Disposition' => 'attachment; filename="'.$id.'.ics'
 		);
-	
-		$vCalendar = new Calendar('Gnukam');
-		foreach($json['data'] AS $event) {
-		    $vEvent = new Event();
+		
+		$vcalendar = new VCalendar();
+		foreach($json['data'] AS $event)
+		{
+			$vevent = $vcalendar->add('VEVENT');
+			
+			# Timezone
+			$timezone = new DateTimeZone('Europe/Paris');
+			
+			# Start and end
 			$start = new DateTime();
 			$start->setTimestamp($event['start']);
+			$start->setTimezone($timezone);
+			
 			$end = new DateTime();
 			$end->setTimestamp($event['end']);
+			$end->setTimezone($timezone);
+			
 			$name = implode(', ', $event['meals']);
 			$description = implode(', ', $event['meals']);
-			$vEvent->setDtStart($start);
-			$vEvent->setDtEnd($end);
-			$vEvent->setSummary($name);
-			$vEvent->setDescription($description);
-			$vEvent->setUseTimezone(true);
-			$vCalendar->addEvent($vEvent);
+			$vevent->add('UID', uniqid('menu_'));
+			$vevent->add('DTSTART', $start);
+			$vevent->add('DTEND', $end);
+			$vevent->add('SUMMARY', $name);
+			$vevent->add('DESCRIPTION', $description);
 		}
 		
-		$calendar =  $vCalendar->render();
+		$calendar =  $vcalendar->serialize();
 		return new Response($calendar, 200, $headers);
 	}
 }
