@@ -13,3 +13,4 @@
 *.kdev4
 /src/Univ/Savoie/EdtBundle/cache
 /src/Crous/Grenoble/MenuBundle/cache
+*~
