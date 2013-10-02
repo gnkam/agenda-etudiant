@@ -39,10 +39,10 @@ class IcsController extends Controller
 			'Content-Disposition' => 'attachment; filename="'.$id.'.ics'
 		);
 		
-		$vcalendar = new VCalendar();
+		$vCalendar = new VCalendar();
 		foreach($json['data'] AS $event)
 		{
-			$vevent = $vcalendar->add('VEVENT');
+			$vEvent = $vCalendar->add('VEVENT');
 			
 			# Timezone
 			$timezone = new DateTimeZone('Europe/Paris');
@@ -58,14 +58,14 @@ class IcsController extends Controller
 			
 			$name = implode(', ', $event['meals']);
 			$description = implode(', ', $event['meals']);
-			$vevent->add('UID', uniqid('menu_'));
-			$vevent->add('DTSTART', $start);
-			$vevent->add('DTEND', $end);
-			$vevent->add('SUMMARY', $name);
-			$vevent->add('DESCRIPTION', $description);
+			$vEvent->add('UID', uniqid('menu_'));
+			$vEvent->add('DTSTART', $start);
+			$vEvent->add('DTEND', $end);
+			$vEvent->add('SUMMARY', $name);
+			$vEvent->add('DESCRIPTION', $description);
 		}
 		
-		$calendar =  $vcalendar->serialize();
+		$calendar =  $vCalendar->serialize();
 		return new Response($calendar, 200, $headers);
 	}
 }

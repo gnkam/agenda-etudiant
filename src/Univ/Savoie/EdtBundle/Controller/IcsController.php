@@ -8,10 +8,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
-use Eluceo\iCal\Component\Calendar;
-use Eluceo\iCal\Component\Event;
+use Sabre\VObject\Component\VCalendar;
 
 use DateTime;
+use DateTimeZone;
 
 /**
 * @Route("/ics/edt")
@@ -39,32 +39,43 @@ class IcsController extends Controller
 			'Content-Disposition' => 'attachment; filename="'.$id.'.ics'
 		);
 	
-		$vCalendar = new Calendar('Gnukam');
+		$vCalendar = new VCalendar();
 		foreach($json['data'] AS $event) {
-		    $vEvent = new Event();
+		    $vEvent = $vCalendar->add('VEVENT');
+			
+			# Timezone
+			$timezone = new DateTimeZone('Europe/Paris');
+			
+			
+			# Start and end
 			$start = new DateTime();
 			$start->setTimestamp($event['start']);
+			$start->setTimezone($timezone);
+			
 			$end = new DateTime();
 			$end->setTimestamp($event['end']);
+			$end->setTimezone($timezone);
+			
+			
 			$name = (empty($event['name'])) ? $event['code'] : $event['name'];
 			$avec = (empty($event['teacher'])) ? '' : ' avec ' . $event['teacher'];
-			$vEvent->setDtStart($start);
-			$vEvent->setDtEnd($end);
-			$vEvent->setSummary($name.$avec);
+			
+			$vEvent->add('UID', uniqid('group_'));
+			$vEvent->add('DTSTART', $start);
+			$vEvent->add('DTEND', $end);
+			$vEvent->add('SUMMARY', $name . $avec);
 			if(!empty($event['place']))
 			{
-				$vEvent->setLocation($event['place']);
+				$vEvent->add('LOCATION', $event['place']);
 			}
 			$description = $this->eventGroupDescription($event);
 			if(!empty($description))
 			{
-				$vEvent->setDescription($description);
+				$vEvent->add('DESCRIPTION', $description);
 			}
-			$vEvent->setUseTimezone(true);
-			$vCalendar->addEvent($vEvent);
 		}
 		
-		$calendar =  $vCalendar->render();
+		$calendar =  $vCalendar->serialize();
 		return new Response($calendar, 200, $headers);
 	}
 	

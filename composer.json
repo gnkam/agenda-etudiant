@@ -22,7 +22,6 @@
         "gnkam/univ-savoie-edt": "*@dev",
         "gnkam/univ-savoie-menu": "*@dev",
         "gnkam/base": "*@dev",
-        "eluceo/ical": "*@dev",
         "sabre/vobject": "3.*"
     },
     "scripts": {
