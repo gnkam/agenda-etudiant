@@ -3,7 +3,7 @@
 namespace Crous\Grenoble\MenuBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
+use Gnkw\Symfony\HttpFoundation\FormatedResponse;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -16,23 +16,19 @@ use Gnkam\Crous\Grenoble\Menu\Formalizer;
 class ApiController extends Controller
 {
     /**
+     * @Route("/{id}.{format}")
      * @Route("/{id}")
      * @Method({"GET"})
      */
-    public function menuIdAction($id)
+    public function menuIdAction($id, $format = 'json')
     {
-		# Use json headers
-		$headers = array(
-			'Content-Type' => 'application/json'
-		);
-		
 		$id = intval($id);
 		if(empty($id))
 		{
-			return new Response(
-				json_encode(array('error' => 'invalid id')),
+			return new FormatedResponse(
+				array('error' => 'invalid id'),
 				400,
-				$headers
+				$format
 			);
 		}
 		
@@ -44,10 +40,10 @@ class ApiController extends Controller
 		{
 			if(!mkdir($cacheLink))
 			{
-				return new Response(
-					json_encode(array('error' => 'impossible to create cache')),
+				return new FormatedResponse(
+					array('error' => 'impossible to create cache'),
 					500,
-					$headers
+					$format
 				);
 				return;
 			}
@@ -62,9 +58,9 @@ class ApiController extends Controller
 		
 		if(isset($json['error']))
 		{
-			return new Response(json_encode($json), 500, $headers);
+			return new FormatedResponse($json, 500, $format);
 		}
 		# Show json
-        return new Response(json_encode($json), 200, $headers);
+        return new FormatedResponse($json, 200, $format);
     }
 }

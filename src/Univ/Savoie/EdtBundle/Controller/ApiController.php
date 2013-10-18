@@ -4,6 +4,7 @@ namespace Univ\Savoie\EdtBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Gnkw\Symfony\HttpFoundation\FormatedResponse;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -16,26 +17,22 @@ use Gnkam\Univ\Savoie\Edt\Formalizer;
 class ApiController extends Controller
 {
     /**
+     * @Route("/group/{id}.{format}")
      * @Route("/group/{id}")
      * @Method({"GET"})
      */
-    public function groupIdAction($id)
+    public function groupIdAction($id, $format = 'json')
     {
 		# Use ProjectId
 		$projectId = 2;
     
-		# Use json headers
-		$headers = array(
-			'Content-Type' => 'application/json'
-		);
-		
 		$id = intval($id);
 		if(empty($id))
 		{
-			return new Response(
-				json_encode(array('error' => 'invalid id')),
+			return new FormatedResponse(
+				array('error' => 'invalid id'),
 				400,
-				$headers
+				$format
 			);
 		}
 		
@@ -47,10 +44,10 @@ class ApiController extends Controller
 		{
 			if(!mkdir($cacheLink))
 			{
-				return new Response(
-					json_encode(array('error' => 'impossible to create cache')),
+				return new FormatedResponse(
+					array('error' => 'impossible to create cache'),
 					500,
-					$headers
+					$format
 				);
 				return;
 			}
@@ -65,9 +62,9 @@ class ApiController extends Controller
 		
 		if(isset($json['error']))
 		{
-			return new Response(json_encode($json), 500, $headers);
+			return new FormatedResponse($json, 500, $format);
 		}
 		# Show json
-        return new Response(json_encode($json), 200, $headers);
+        return new FormatedResponse($json, 200, $format);
     }
 }
