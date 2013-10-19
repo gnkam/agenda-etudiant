@@ -56,14 +56,10 @@ class IcsController extends Controller
 			$end->setTimestamp($event['end']);
 			$end->setTimezone($timezone);
 			
-			
-			$name = (empty($event['name'])) ? $event['code'] : $event['name'];
-			$avec = (empty($event['teacher'])) ? '' : ' avec ' . $event['teacher'];
-			
 			$vEvent->add('UID', uniqid('group_'));
 			$vEvent->add('DTSTART', $start);
 			$vEvent->add('DTEND', $end);
-			$vEvent->add('SUMMARY', $name . $avec);
+			$vEvent->add('SUMMARY', $event['summary']);
 			if(!empty($event['place']))
 			{
 				$vEvent->add('LOCATION', $event['place']);
