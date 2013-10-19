@@ -60,6 +60,7 @@ class IcsController extends Controller
 			$vEvent->add('DTSTART', $start);
 			$vEvent->add('DTEND', $end);
 			$vEvent->add('SUMMARY', $event['summary']);
+			$vEvent->add('CATEGORY', $event['type']);
 			if(!empty($event['place']))
 			{
 				$vEvent->add('LOCATION', $event['place']);
