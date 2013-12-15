@@ -3,7 +3,7 @@
 namespace Crous\Grenoble\MenuBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Gnkw\Symfony\HttpFoundation\FormatedResponse;
+use Gnkw\Symfony\HttpFoundation\FormattedResponse;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -25,7 +25,7 @@ class ApiController extends Controller
 		$id = intval($id);
 		if(empty($id))
 		{
-			return new FormatedResponse(
+			return new FormattedResponse(
 				array('error' => 'invalid id'),
 				400,
 				$format
@@ -40,7 +40,7 @@ class ApiController extends Controller
 		{
 			if(!mkdir($cacheLink))
 			{
-				return new FormatedResponse(
+				return new FormattedResponse(
 					array('error' => 'impossible to create cache'),
 					500,
 					$format
@@ -58,9 +58,9 @@ class ApiController extends Controller
 		
 		if(isset($json['error']))
 		{
-			return new FormatedResponse($json, 500, $format);
+			return new FormattedResponse($json, 500, $format);
 		}
 		# Show json
-        return new FormatedResponse($json, 200, $format);
+        return new FormattedResponse($json, 200, $format);
     }
 }
