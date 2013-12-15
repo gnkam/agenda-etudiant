@@ -1,3 +1,8 @@
+etudiant_agenda:
+    resource: "@EtudiantAgendaBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 crous_grenoble_menu:
     resource: "@CrousGrenobleMenuBundle/Controller/"
     type:     annotation

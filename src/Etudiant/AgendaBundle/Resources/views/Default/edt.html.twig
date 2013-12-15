@@ -1,0 +1,104 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Emploi du temps</title>
+		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.css" />
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.min.js" ></script>
+		<script>
+			var server = "{{ path('agenda_index') }}";
+		</script>
+		<script src="{{ asset('bundles/etudiantagenda/js/app.js') }}"></script>
+		<style>
+			body
+			{
+				font-family: sans-serif;
+			}
+			#waiting
+			{
+				position: absolute;
+				text-align: center;
+				top: 0px;
+				right: 0px;
+				left: 0px;
+				z-index: 70;
+				height: 25px;
+				overflow: hidden;
+			}
+			#waiting>._element span
+			{
+				font-size: 18px;
+				height: 20px;
+				padding: 2px;
+				border-bottom: solid 1px black;
+				border-right: solid 1px black;
+				border-left: solid 1px black;
+				background: rgba(0,0,0,0.8);
+				color: #fff;
+				display: inline-block;
+			}
+			#popup
+			{
+				position: fixed;
+				display: none;
+				z-index: 60;
+				overflow: auto;
+				bottom: 50px;
+				right: 0px;
+				left: 0px;
+				background-color: rgba(255,255,255,0.7);
+				box-shadow: 0px 0px 10px #000;
+			}
+			#popup>.close
+			{
+				float: right;
+				padding: 5px;
+				border-left: 1px solid black;
+				border-bottom: 1px solid black;
+			}
+			
+			#menu
+			{
+				position: fixed;
+				z-index: 70;
+				overflow: auto;
+				bottom: 0px;
+				background-color: #fff;
+				right: 0px;
+				left: 0px;
+				height: 50px;
+				overflow-x:auto;
+				white-space:nowrap;
+				box-shadow: 0px 0px 10px #000;
+			}
+			#summaryCalendar
+			{
+				text-align: center;
+				font-size: 4em;
+			}
+			.fc-header {
+				z-index: 60;
+				position: fixed;
+				top: 0px;
+				right: 0px;
+				left: 0px;
+				height: 50px;
+				background-color: #fff;
+				box-shadow: 0px 0px 10px #000;
+			}
+			.fc-view{
+				position: absolute;
+				top: 50px;
+				right: 0px;
+				left: 0px;
+				padding-bottom: 50px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="waiting"></div>
+		<div id="popup"><div class="_element"><div></div></div></div>
+		<div id="menu"></div>
+		<div id="calendar"><div id="summaryCalendar">Veuillez sélectionner une formation à afficher</div></div>
+	</body>
+</html>
