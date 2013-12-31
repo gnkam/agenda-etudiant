@@ -41,14 +41,6 @@ class ApiController extends Controller
     public function menuIdAction($id, $format = 'json')
     {
 		$id = intval($id);
-		if(empty($id))
-		{
-			return new FormattedResponse(
-				array('error' => 'invalid id'),
-				400,
-				$format
-			);
-		}
 		
 		# Cache link
 		$cacheLink = __DIR__ . '/../cache';
@@ -59,11 +51,10 @@ class ApiController extends Controller
 			if(!mkdir($cacheLink))
 			{
 				return new FormattedResponse(
-					array('error' => 'impossible to create cache'),
+					array('type' => 'error', 'message' => 'Impossible to create cache', 'code' => 500),
 					500,
 					$format
 				);
-				return;
 			}
 		}
 		
@@ -73,10 +64,9 @@ class ApiController extends Controller
 		# Formalize Data
 		$formalizer = new Formalizer($cacheLink, $update);
 		$json = $formalizer->serviceMenu($id);
-		
-		if(isset($json['error']))
+		if(isset($json['type']) AND $json['type'] === 'error')
 		{
-			return new FormattedResponse($json, 500, $format);
+			return new FormattedResponse($json, $json['code'], $format);
 		}
 		# Show json
         return new FormattedResponse($json, 200, $format);

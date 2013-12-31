@@ -53,7 +53,7 @@ class ApiController extends Controller
 		if(empty($id))
 		{
 			return new FormattedResponse(
-				array('error' => 'invalid id'),
+				array('type' => 'error', 'message' => 'Invalid id', 'code' => 500),
 				400,
 				$format
 			);
@@ -63,9 +63,9 @@ class ApiController extends Controller
 		$formalizer = $this->edtFormalizer($format, $update);
 		$json = $formalizer->serviceGroup($id);
 		
-		if(isset($json['error']))
+		if(isset($json['type']) AND $json['type'] === 'error')
 		{
-			return new FormattedResponse($json, 500, $format);
+			return new FormattedResponse($json, $json['code'], $format);
 		}
 		# Show json
         return new FormattedResponse($json, 200, $format);
@@ -87,9 +87,9 @@ class ApiController extends Controller
 		$formalizer = $this->edtFormalizer($format, $update);
 		$json = $formalizer->serviceTree($node);
 		
-		if(isset($json['error']))
+		if(isset($json['type']) AND $json['type'] === 'error')
 		{
-			return new FormattedResponse($json, 500, $format);
+			return new FormattedResponse($json, $json['code'], $format);
 		}
 		# Show json
         return new FormattedResponse($json, 200, $format);
@@ -105,11 +105,10 @@ class ApiController extends Controller
 			if(!mkdir($cacheLink))
 			{
 				return new FormattedResponse(
-					array('error' => 'impossible to create cache'),
+					array('type' => 'error', 'message' => 'Impossible to create cache', 'code' => 500),
 					500,
 					$format
 				);
-				return;
 			}
 		}
 		# Formalize Data
