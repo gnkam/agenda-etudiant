@@ -1,7 +1,29 @@
+/*
+* Copyright (c) 2013 GNKW & Kamsoft.fr
+*
+* This file is part of GNKam Agenda Etudiant.
+*
+* GNKam Agenda Etudiant is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* GNKam Agenda Etudiant is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Affero General Public License for more details.
+*
+* You should have received a copy of the GNU Affero General Public License
+* along with GNKam Agenda Etudiant.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 $(document).ready(main);
 var selectorCalendar = "#calendar";
 var selectorMenu = "#menu";
+var selectorGroups = "#groups";
 var oldEvent;
+var wait = new agendaetudiant.waiting('#waiting');
+var myJson = new agendaetudiant.jsonp();
 
 function stripTrailingSlash(str) {
 	if(str.substr(-1) == '/') {
@@ -10,57 +32,15 @@ function stripTrailingSlash(str) {
 	return str;
 }
 
-function main()
+function initCalendar()
 {
-	server = stripTrailingSlash(server);
-	waiting('tree');
-	$.getJSON(server + "/api/edt/tree.jsonp?tree=?");
-	var groupid = readCookie("groupid");
-	if(groupid !== null)
-	{
-		showCalendar(groupid);
-	}
-}
-function select(selector){
-	$(selector).nextAll().remove();
-	var value = selector.options[selector.selectedIndex].value;
-	if(value !== undefined){
-		var type = $(selector.options[selector.selectedIndex]).attr('datatype');
-		if(type == 'treeitem')
-		{
-			showCalendar(value);
-		}
-		else{
-			waiting('tree');
-			$.getJSON(server + "/api/edt/tree/" + value + ".jsonp?tree=?");
-		}
-	}
-}
-
-function tree(d){
-	var childs = d.data.childs;
-	var element = '<select name="'+d.data.id+'" onchange="select(this);">';
-	element += "<option>---</option>"
-	for (var key in childs){
-		var child = childs[key];
-		element += '<option value="'+childs[key].id+'" datatype="'+child.type+'">'+childs[key].name+'</option>';
-	}
-	element += '</select>';
-	$(selectorMenu).append(element);
-	stopWaiting('tree');
-}
-
-function showCalendar(id)
-{
-	createCookie('groupid', id, 7);
 	$(selectorCalendar).html("");
-	var firstHour = new Date().getUTCHours() - 5;
 	$(selectorCalendar).fullCalendar({
 		firstHour: 7,
 		header: {
-			left: 'prev, next',
-			center: 'title',
-			right: 'today, month, agendaWeek, agendaDay'
+			left: 'prev, next, today, month, agendaWeek, agendaDay',
+			center: '',
+			right: 'title'
 		},
 		defaultView: 'agendaWeek',
 		timeFormat:
@@ -114,12 +94,60 @@ function showCalendar(id)
 			'': 'H:mm', // événements vue mensuelle.
 			agenda: 'H:mm{ - H:mm}' // événements vue agenda
 		},
-		firstDay:0 // Lundi premier jour de la semaine
+		firstDay:0, // Lundi premier jour de la semaine
+		height: 650
 	});
-// 	waiting('menu');
+}
+
+function main()
+{
+	server = stripTrailingSlash(server);
+	initCalendar();
+	wait.start('tree');
+// 	myJson.get(7292, server + "/api/edt/group/"+7292+".jsonp", edt(id, args));
+	$.getJSON(server + "/api/edt/tree.jsonp?tree=?");
+	var groupid = readCookie("groupid");
+	if(groupid !== null)
+	{
+		showCalendar(groupid);
+	}
+}
+function select(selector){
+	$(selector).nextAll().remove();
+	var value = selector.options[selector.selectedIndex].value;
+	if(value !== undefined){
+		var type = $(selector.options[selector.selectedIndex]).attr('datatype');
+		if(type == 'treeitem')
+		{
+			showCalendar(value);
+		}
+		else{
+			wait.start('tree');
+			$.getJSON(server + "/api/edt/tree/" + value + ".jsonp?tree=?");
+		}
+	}
+}
+
+function tree(d){
+	var childs = d.data.childs;
+	var element = '<select class="form-control" name="'+d.data.id+'" onchange="select(this);">';
+	element += "<option>---</option>"
+	for (var key in childs){
+		var child = childs[key];
+		element += '<option value="'+childs[key].id+'" datatype="'+child.type+'">'+childs[key].name+'</option>';
+	}
+	element += '</select>';
+	$(selectorMenu).append(element);
+	wait.stop('tree');
+}
+
+function showCalendar(id)
+{
+	createCookie('groupid', id, 7);
+// 	wait.start('menu');
 // 	$.getJSON(server + "/api/menu/7.jsonp?menu=?");
-	waiting('edt');
-	$.getJSON(server + "/api/edt/group/"+id+".jsonp?edt=?");
+	wait.start('edt');
+	myJson.get(id, server + "/api/edt/group/"+id+".jsonp", function(id, args){ edt(id, args);});
 }
 
 function resetOldEvent()
@@ -228,7 +256,7 @@ function hoursMinutesFormat(date)
 function popup(html)
 {
 	$("#popup").show();
-	$("#popup").html('<div class="close"><a href="javascript:;" onclick="closePopup()">Fermer</a></div><div class="content">'+html+'</div>');
+	$("#popup").html('<div class="pull-right"><a href="javascript:;" onclick="closePopup()" class="close" aria-hidden="true">&times;</a></div><div class="content">'+html+'</div>');
 }
 
 function closePopup()
@@ -275,14 +303,42 @@ function menu(data)
 		};
 		$(selectorCalendar).fullCalendar( 'renderEvent', event , true);
 	}
-	stopWaiting('menu');
+	wait.stop('menu');
 }
 
-
-
-function edt(data)
+function addGroupButton(id)
 {
-	$(selectorCalendar).fullCalendar( 'removeEvents', "edt");
+	if (!$('#btn_edt_'+id).length ) {
+		var icsLink = Routing.generate('ics_edt_group', { id: id });
+		$(selectorGroups).append('<div id="btn_edt_'+id+'" class="btn-group">\
+			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">\
+				Groupe : '+id+' <span class="caret"></span>\
+			</button>\
+			<ul class="dropdown-menu" role="menu">\
+				<li><a href="' + icsLink + '">Récupérer le calendrier</a></li>\
+				<li class="divider"></li>\
+				<li><a href="javascript:;" onclick="removeToCalendar(\'edt_'+id+'\')">Fermer</a></li>\
+			</ul>\
+		</div>');
+		
+	}
+}
+
+function removeToCalendar(eventId)
+{
+	$('#btn_'+eventId).remove();
+	removeCalendar(eventId);
+}
+
+function removeCalendar(eventId)
+{
+	$(selectorCalendar).fullCalendar( 'removeEvents', eventId);
+}
+
+function edt(id, data)
+{
+	removeCalendar("edt_"+id);
+	addGroupButton(id);
 	var length = data.data.length;
 	var element = null;
 	for(var i = 0; i< length; i++)
@@ -317,7 +373,7 @@ function edt(data)
 		}
 		
 		var event = {
-			id : "edt",
+			id : "edt_"+id,
 			filter : "edt",
 			title : summary,
 			start : element.start,
@@ -330,7 +386,7 @@ function edt(data)
 		};
 		$(selectorCalendar).fullCalendar( 'renderEvent', event , true);
 	}
-	stopWaiting('edt');
+	wait.stop('edt');
 }
 
 /**

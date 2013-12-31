@@ -2,12 +2,34 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}Agenda Étudiant{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% block stylesheets %}
+        <!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
+		<!-- Base theme -->
+		<link rel="stylesheet" href="{{ asset('stylesheets/base.css') }}">
+        {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
+		<div id="waiting"></div>
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        <div class="container">
+			<footer>
+				Ce site est sous licence libre AGPL V3.0, <a title="à propos" href="{{ path('agenda_about') }}" role="button">en savoir plus</a>. <span class="label label-primary">Version bêta</span>
+			</footer>
+        </div>
+        {% block javascripts %}
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <!-- Latest compiled and minified JavaScript -->
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+		<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+		<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+        <script src="{{ asset('javascripts/base.js') }}"></script>
+        {% endblock %}
     </body>
 </html>

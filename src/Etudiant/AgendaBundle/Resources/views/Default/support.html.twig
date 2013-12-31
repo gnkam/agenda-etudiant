@@ -1,0 +1,46 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}{{ parent() }} - Support{% endblock %}
+
+{% block body %}
+{{ render(controller('EtudiantAgendaBundle:Default:menu', { 'active': 'agenda_support' })) }}
+<div class="container">
+	<article>
+		<div class="jumbotron">
+			<h1>Support</h1>
+			<p>Vous souhaitez savoir quels services nous supportons, voici ci dessous une liste de ce qui est supporté ou en cours de support</p>
+		</div>
+	</article>
+	<article>
+		<div class="table-responsive">
+			<table class="table table-condensed table-bordered">
+				<thead>
+					<tr>
+						<th>Service</th>
+						<th>Api</th>
+						<th>Composants</th>
+						<th>Documentation</th>
+						<th>Vue</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Emploi du temps Université de savoie</td>
+						<td class="success">OK</td>
+						<td class="success">OK</td>
+						<td class="warning">En cours</td>
+						<td class="success">OK</td>
+					</tr>
+					<tr>
+						<td>Menu Crous académie de Grenoble</td>
+						<td class="success">OK</td>
+						<td class="success">OK</td>
+						<td class="warning">En cours</td>
+						<td class="danger">À faire</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</article>
+</div>
+{% endblock %}

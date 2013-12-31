@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new Univ\Savoie\EdtBundle\UnivSavoieEdtBundle(),
             new Crous\Grenoble\MenuBundle\CrousGrenobleMenuBundle(),
             new Etudiant\AgendaBundle\EtudiantAgendaBundle(),
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

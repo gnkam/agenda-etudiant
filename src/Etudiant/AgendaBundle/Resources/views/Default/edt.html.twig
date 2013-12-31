@@ -1,104 +1,121 @@
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<title>Emploi du temps</title>
-		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.css" />
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.min.js" ></script>
-		<script>
-			var server = "{{ path('agenda_index') }}";
-		</script>
-		<script src="{{ asset('bundles/etudiantagenda/js/app.js') }}"></script>
-		<style>
-			body
-			{
-				font-family: sans-serif;
-			}
-			#waiting
-			{
-				position: absolute;
-				text-align: center;
-				top: 0px;
-				right: 0px;
-				left: 0px;
-				z-index: 70;
-				height: 25px;
-				overflow: hidden;
-			}
-			#waiting>._element span
-			{
-				font-size: 18px;
-				height: 20px;
-				padding: 2px;
-				border-bottom: solid 1px black;
-				border-right: solid 1px black;
-				border-left: solid 1px black;
-				background: rgba(0,0,0,0.8);
-				color: #fff;
-				display: inline-block;
-			}
-			#popup
-			{
-				position: fixed;
-				display: none;
-				z-index: 60;
-				overflow: auto;
-				bottom: 50px;
-				right: 0px;
-				left: 0px;
-				background-color: rgba(255,255,255,0.7);
-				box-shadow: 0px 0px 10px #000;
-			}
-			#popup>.close
-			{
-				float: right;
-				padding: 5px;
-				border-left: 1px solid black;
-				border-bottom: 1px solid black;
-			}
+{% extends '::base.html.twig' %}
+
+{% block title %}{{ parent() }} - Emploi du temps{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.css" />
+<style>
+	#popup
+	{
+		position: fixed;
+		display: none;
+		z-index: 60;
+		overflow: auto;
+		bottom: 50px;
+		right: 0px;
+		left: 0px;
+		background-color: rgba(255,255,255,0.9);
+		box-shadow: 0px 0px 10px #000;
+	}
+	
+	#summaryCalendar
+	{
+		text-align: center;
+		font-size: 4em;
+	}
+	
+	.fc-header-title h2{
+		font-size: 14px;
+	}
+	
+	/*
+	* Off Canvas
+	* --------------------------------------------------
+	*/
+	@media screen and (max-width: 767px) {
+
+		.fc-header-title h2{
+			max-width: 100px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		.fc-header-left,
+		.fc-header-right,
+		.fc-header-center,
+		.fc-header-title h2{
+			font-size: 10px;
+		}
+		.row-offcanvas {
+			position: relative;
+			-webkit-transition: all 0.25s ease-out;
+			-moz-transition: all 0.25s ease-out;
+			transition: all 0.25s ease-out;
+		}
+
+		.row-offcanvas-right
+		.sidebar-offcanvas {
+			right: -50%; /* 6 columns */
+		}
+
+		.row-offcanvas-left
+		.sidebar-offcanvas {
+			left: -50%; /* 6 columns */
+		}
+
+		.row-offcanvas-right.active {
+			right: 50%; /* 6 columns */
+		}
+
+		.row-offcanvas-left.active {
+			left: 50%; /* 6 columns */
+		}
+
+		.sidebar-offcanvas {
+			position: absolute;
+			top: 0;
+			width: 50%; /* 6 columns */
+		}
+	}
+</style>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.min.js" ></script>
+<script>
+	var server = "{{ path('agenda_index') }}";
+</script>
+<script src="{{ asset('bundles/etudiantagenda/js/app.js') }}"></script>
+<script>
+	$(document).ready(function() {
+	$('[data-toggle=offcanvas]').click(function() {
+		$('.row-offcanvas').toggleClass('active');
+	});
+	});
+</script>
+{% endblock %}
+
+{% set button %}
+    <div class="pull-left visible-xs">
+		<button type="button" class="btn btn-default navbar-btn" data-toggle="offcanvas">Emploi du temps</button>
+	</div>
+{% endset %}
+
+{% block body %}
+{{ render(controller('EtudiantAgendaBundle:Default:menu', { 'active': 'agenda_edt', 'button' : button })) }}
+<div class="container">
+	<div class="row row-offcanvas row-offcanvas-left">
+		<div class="col-xs-6 col-sm-2 sidebar-offcanvas" id="sidebar" role="navigation"> 
+			<div id="menu"></div>
+			<hr />
+			<div id="groups" class="list-group"></div>
+		</div><!--/span-->
+		<div class="col-xs-12 col-sm-10">
+			<div id="popup"><div class="_element"><div></div></div></div>
 			
-			#menu
-			{
-				position: fixed;
-				z-index: 70;
-				overflow: auto;
-				bottom: 0px;
-				background-color: #fff;
-				right: 0px;
-				left: 0px;
-				height: 50px;
-				overflow-x:auto;
-				white-space:nowrap;
-				box-shadow: 0px 0px 10px #000;
-			}
-			#summaryCalendar
-			{
-				text-align: center;
-				font-size: 4em;
-			}
-			.fc-header {
-				z-index: 60;
-				position: fixed;
-				top: 0px;
-				right: 0px;
-				left: 0px;
-				height: 50px;
-				background-color: #fff;
-				box-shadow: 0px 0px 10px #000;
-			}
-			.fc-view{
-				position: absolute;
-				top: 50px;
-				right: 0px;
-				left: 0px;
-				padding-bottom: 50px;
-			}
-		</style>
-	</head>
-	<body>
-		<div id="waiting"></div>
-		<div id="popup"><div class="_element"><div></div></div></div>
-		<div id="menu"></div>
-		<div id="calendar"><div id="summaryCalendar">Veuillez sélectionner une formation à afficher</div></div>
-	</body>
-</html>
+			<div id="calendar" class="col-md-10"><div id="summaryCalendar">Veuillez sélectionner une formation à afficher</div></div>
+		</div><!--/span-->
+	</div><!--/row-->
+</div>
+{% endblock %}

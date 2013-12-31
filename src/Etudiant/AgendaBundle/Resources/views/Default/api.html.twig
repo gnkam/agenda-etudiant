@@ -1,0 +1,15 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}{{ parent() }} - Api{% endblock %}
+
+{% block body %}
+{{ render(controller('EtudiantAgendaBundle:Default:menu', { 'active': 'agenda_api' })) }}
+<div class="container">
+	<article>
+		<div class="jumbotron">
+			<h1>Api</h1>
+			<p>Vous souhaitez développer une application  en utilisant nos services, c'est possible via nos différentes api …</p>
+		</div>
+	</article>
+</div>
+{% endblock %}

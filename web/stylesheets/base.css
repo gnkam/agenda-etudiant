@@ -1,4 +1,3 @@
-<?php
 /*
 * Copyright (c) 2013 GNKW & Kamsoft.fr
 *
@@ -18,10 +17,37 @@
 * along with GNKam Agenda Etudiant.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Etudiant\AgendaBundle;
+html,
+body {
+  overflow-x: hidden;
+}
+body {
+  padding-top: 70px;
+}
+footer {
+  padding: 30px 0;
+}
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-
-class EtudiantAgendaBundle extends Bundle
+#waiting
 {
+	position: absolute;
+	text-align: center;
+	top: 0px;
+	right: 0px;
+	left: 0px;
+	z-index: 4000;
+	max-height: 24px;
+	overflow: hidden;
+}
+#waiting>._element span
+{
+	font-size: 14px;
+	height: 24px;
+	padding: 2px;
+	border-bottom: solid 1px black;
+	border-right: solid 1px black;
+	border-left: solid 1px black;
+	background: rgba(245,245,245,0.8);
+	color: #444;
+	display: inline-block;
 }
