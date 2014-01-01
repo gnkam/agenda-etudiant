@@ -24,6 +24,19 @@ var selectorGroups = "#groups";
 var oldEvent;
 var wait = new agendaetudiant.waiting('#waiting');
 var myJson = new agendaetudiant.jsonp();
+var treeNodes = {};
+var groupsId = {};
+
+Array.prototype.remove = function() {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};
 
 function stripTrailingSlash(str) {
 	if(str.substr(-1) == '/') {
@@ -104,14 +117,24 @@ function main()
 	server = stripTrailingSlash(server);
 	initCalendar();
 	wait.start('tree');
-// 	myJson.get(7292, server + "/api/edt/group/"+7292+".jsonp", edt(id, args));
 	$.getJSON(server + "/api/edt/tree.jsonp?tree=?");
-	var groupid = readCookie("groupid");
-	if(groupid !== null)
-	{
-		showCalendar(groupid);
+	receiveStorage();
+	for (var key in groupsId){
+		if(groupsId[key])
+		{
+			showCalendar(key);
+		}
 	}
 }
+
+function receiveStorage()
+{
+	var temp = getFromStorage('agendaetudiant@treeNodes');
+	if(temp !== null) { treeNodes = temp; };
+	temp = getFromStorage('agendaetudiant@groupsId');
+	if(temp !== null) { groupsId = temp; };
+}
+
 function select(selector){
 	$(selector).nextAll().remove();
 	var value = selector.options[selector.selectedIndex].value;
@@ -128,22 +151,46 @@ function select(selector){
 	}
 }
 
+function putInStorage(key, json)
+{
+	if(typeof(Storage)!=="undefined")
+	{
+		localStorage.setItem(key, JSON.stringify(json));
+	}
+}
+
+function getFromStorage(key)
+{
+	var json = null;
+	if(typeof(Storage)!=="undefined")
+	{
+		var jsonString = localStorage.getItem(key);
+		if(null === jsonString)
+		{
+			return null;
+		}
+		json = JSON.parse(jsonString);
+	}
+	return json;
+}
+
 function tree(d){
 	var childs = d.data.childs;
-	var element = '<select class="form-control" name="'+d.data.id+'" onchange="select(this);">';
+	var element = '<select class="form-control ae-v-spacing" name="'+d.data.id+'" onchange="select(this);">';
 	element += "<option>---</option>"
 	for (var key in childs){
 		var child = childs[key];
-		element += '<option value="'+childs[key].id+'" datatype="'+child.type+'">'+childs[key].name+'</option>';
+		treeNodes[child.id] = child;
+		element += '<option value="'+child.id+'" datatype="'+child.type+'">'+child.name+'</option>';
 	}
 	element += '</select>';
+	putInStorage('agendaetudiant@treeNodes',treeNodes);
 	$(selectorMenu).append(element);
 	wait.stop('tree');
 }
 
 function showCalendar(id)
 {
-	createCookie('groupid', id, 7);
 // 	wait.start('menu');
 // 	$.getJSON(server + "/api/menu/7.jsonp?menu=?");
 	wait.start('edt');
@@ -306,39 +353,57 @@ function menu(data)
 	wait.stop('menu');
 }
 
-function addGroupButton(id)
+function addGroupButton(id, name)
 {
 	if (!$('#btn_edt_'+id).length ) {
 		var icsLink = Routing.generate('ics_edt_group', { id: id });
-		$(selectorGroups).append('<div id="btn_edt_'+id+'" class="btn-group">\
-			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">\
-				Groupe : '+id+' <span class="caret"></span>\
+		$(selectorGroups).append('<div id="btn_edt_'+id+'" class="ae-v-spacing btn-group btn-group-justified">\
+			<button type="button" title="'+name+'" class="btn btn-primary dropdown-toggle" style="display:block; width: 100%;" data-toggle="dropdown">\
+				<span class="ae-col-90-ellipsis">'+name+'</span> <span class="caret"></span>\
 			</button>\
 			<ul class="dropdown-menu" role="menu">\
 				<li><a href="' + icsLink + '">Récupérer le calendrier</a></li>\
 				<li class="divider"></li>\
-				<li><a href="javascript:;" onclick="removeToCalendar(\'edt_'+id+'\')">Fermer</a></li>\
+				<li><a href="javascript:;" onclick="removeButtonCalendar(\'edt\', '+id+')">Fermer</a></li>\
 			</ul>\
 		</div>');
 		
 	}
 }
 
-function removeToCalendar(eventId)
+function removeButtonCalendar(classId, id)
 {
-	$('#btn_'+eventId).remove();
-	removeCalendar(eventId);
+	$('#btn_'+classId+'_'+id).remove();
+	removeCalendar(id);
 }
 
-function removeCalendar(eventId)
+function removeCalendar(classId, id)
 {
-	$(selectorCalendar).fullCalendar( 'removeEvents', eventId);
+	setGroupId(id, false);
+	$(selectorCalendar).fullCalendar( 'removeEvents', classId + '_' + id);
+}
+
+function setGroupId(id, value)
+{
+	if(id !== undefined)
+	{
+		groupsId[id] = value;
+		putInStorage('agendaetudiant@groupsId',groupsId);
+	}
 }
 
 function edt(id, data)
 {
-	removeCalendar("edt_"+id);
-	addGroupButton(id);
+	removeCalendar("edt", id);
+	setGroupId(id, true);
+	var name = id;
+	console.log(id);
+	console.log(treeNodes);
+	if(treeNodes[id] !== undefined)
+	{
+		name = treeNodes[id].name;
+	}
+	addGroupButton(id, name);
 	var length = data.data.length;
 	var element = null;
 	for(var i = 0; i< length; i++)

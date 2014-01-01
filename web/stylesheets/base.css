@@ -51,3 +51,14 @@ footer {
 	color: #444;
 	display: inline-block;
 }
+
+.ae-v-spacing{
+	margin: 0px 0px 10px;
+}
+
+.ae-col-90-ellipsis {
+	display: inline-block;
+	width: 90%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
