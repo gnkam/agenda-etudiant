@@ -17,38 +17,30 @@
 * along with GNKam Agenda Etudiant.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-$(document).ready(main);
-var selectorCalendar = "#calendar";
-var selectorMenu = "#menu";
-var selectorGroups = "#groups";
-var oldEvent;
-var wait = new agendaetudiant.waiting('#waiting');
-var myJson = new agendaetudiant.jsonp();
-var treeNodes = {};
-var groupsId = {};
+var agendaetudiantEdt = agendaetudiantEdt || {};
 
-Array.prototype.remove = function() {
-    var what, a = arguments, L = a.length, ax;
-    while (L && this.length) {
-        what = a[--L];
-        while ((ax = this.indexOf(what)) !== -1) {
-            this.splice(ax, 1);
-        }
-    }
-    return this;
-};
+$(document).ready(function(){agendaetudiantEdt.main();});
+agendaetudiantEdt.server = Routing.generate('agenda_index');
+agendaetudiantEdt.selectorCalendar = "#calendar";
+agendaetudiantEdt.selectorMenu = "#menu";
+agendaetudiantEdt.selectorGroups = "#groups";
+agendaetudiantEdt.oldEvent;
+agendaetudiantEdt.wait = new agendaetudiant.waiting('#waiting');
+agendaetudiantEdt.myJson = new agendaetudiant.jsonp();
+agendaetudiantEdt.treeNodes = {};
+agendaetudiantEdt.groupsId = {};
 
-function stripTrailingSlash(str) {
+agendaetudiantEdt.stripTrailingSlash = function(str) {
 	if(str.substr(-1) == '/') {
 		return str.substr(0, str.length - 1);
 	}
 	return str;
 }
 
-function initCalendar()
+agendaetudiantEdt.initCalendar = function()
 {
-	$(selectorCalendar).html("");
-	$(selectorCalendar).fullCalendar({
+	$(agendaetudiantEdt.selectorCalendar).html("");
+	$(agendaetudiantEdt.selectorCalendar).fullCalendar({
 		firstHour: 7,
 		header: {
 			left: 'prev, next, today, month, agendaWeek, agendaDay',
@@ -63,21 +55,21 @@ function initCalendar()
 			'': 'H:mm'
 		},
 		eventClick: function(calEvent, jsEvent, view) {
-			resetOldEvent();
-			oldEvent = { event : undefined, backgroundColor : undefined, textColor : undefined};
-			createOldEvent(calEvent);
+			agendaetudiantEdt.resetOldEvent();
+			agendaetudiantEdt.oldEvent = { event : undefined, backgroundColor : undefined, textColor : undefined};
+			agendaetudiantEdt.createOldEvent(calEvent);
 			calEvent.backgroundColor = "white";
 			calEvent.textColor = "black";
 			switch(calEvent.filter)
 			{
 				case 'edt':
-					popupEdt(calEvent.data);
+					agendaetudiantEdt.popupEdt(calEvent.data);
 					break;
 				case 'menu':
-					popupMenu(calEvent.data);
+					agendaetudiantEdt.popupMenu(calEvent.data);
 					break;
 			}
-			$(selectorCalendar).fullCalendar( 'rerenderEvents' );
+			$(agendaetudiantEdt.selectorCalendar).fullCalendar( 'rerenderEvents' );
 			
 		},
 		buttonText : {
@@ -112,46 +104,46 @@ function initCalendar()
 	});
 }
 
-function main()
+agendaetudiantEdt.main = function()
 {
-	server = stripTrailingSlash(server);
-	initCalendar();
-	wait.start('tree');
-	$.getJSON(server + "/api/edt/tree.jsonp?tree=?");
-	receiveStorage();
-	for (var key in groupsId){
-		if(groupsId[key])
+	agendaetudiantEdt.server = agendaetudiantEdt.stripTrailingSlash(agendaetudiantEdt.server);
+	agendaetudiantEdt.initCalendar();
+	agendaetudiantEdt.wait.start('tree');
+	$.getJSON(agendaetudiantEdt.server + "/api/edt/tree.jsonp?agendaetudiantEdt.tree=?");
+	agendaetudiantEdt.receiveStorage();
+	for (var key in agendaetudiantEdt.groupsId){
+		if(agendaetudiantEdt.groupsId[key])
 		{
-			showCalendar(key);
+			agendaetudiantEdt.showCalendar(key);
 		}
 	}
 }
 
-function receiveStorage()
+agendaetudiantEdt.receiveStorage = function()
 {
-	var temp = getFromStorage('agendaetudiant@treeNodes');
-	if(temp !== null) { treeNodes = temp; };
-	temp = getFromStorage('agendaetudiant@groupsId');
-	if(temp !== null) { groupsId = temp; };
+	var temp = agendaetudiantEdt.getFromStorage('agendaetudiant@treeNodes');
+	if(temp !== null) { agendaetudiantEdt.treeNodes = temp; };
+	temp = agendaetudiantEdt.getFromStorage('agendaetudiant@groupsId');
+	if(temp !== null) { agendaetudiantEdt.groupsId = temp; };
 }
 
-function select(selector){
+agendaetudiantEdt.select = function(selector){
 	$(selector).nextAll().remove();
 	var value = selector.options[selector.selectedIndex].value;
 	if(value !== undefined){
 		var type = $(selector.options[selector.selectedIndex]).attr('datatype');
 		if(type == 'treeitem')
 		{
-			showCalendar(value);
+			agendaetudiantEdt.showCalendar(value);
 		}
 		else{
-			wait.start('tree');
-			$.getJSON(server + "/api/edt/tree/" + value + ".jsonp?tree=?");
+			agendaetudiantEdt.wait.start('tree');
+			$.getJSON(agendaetudiantEdt.server + "/api/edt/tree/" + value + ".jsonp?agendaetudiantEdt.tree=?");
 		}
 	}
 }
 
-function putInStorage(key, json)
+agendaetudiantEdt.putInStorage = function(key, json)
 {
 	if(typeof(Storage)!=="undefined")
 	{
@@ -159,7 +151,7 @@ function putInStorage(key, json)
 	}
 }
 
-function getFromStorage(key)
+agendaetudiantEdt.getFromStorage = function(key)
 {
 	var json = null;
 	if(typeof(Storage)!=="undefined")
@@ -174,69 +166,69 @@ function getFromStorage(key)
 	return json;
 }
 
-function tree(d){
+agendaetudiantEdt.tree = function(d){
 	var childs = d.data.childs;
-	var element = '<select class="form-control ae-v-spacing" name="'+d.data.id+'" onchange="select(this);">';
+	var element = '<select class="form-control ae-v-spacing" name="'+d.data.id+'" onchange="agendaetudiantEdt.select(this);">';
 	element += "<option>---</option>"
 	for (var key in childs){
 		var child = childs[key];
-		treeNodes[child.id] = child;
+		agendaetudiantEdt.treeNodes[child.id] = child;
 		element += '<option value="'+child.id+'" datatype="'+child.type+'">'+child.name+'</option>';
 	}
 	element += '</select>';
-	putInStorage('agendaetudiant@treeNodes',treeNodes);
-	$(selectorMenu).append(element);
-	wait.stop('tree');
+	agendaetudiantEdt.putInStorage('agendaetudiant@treeNodes',agendaetudiantEdt.treeNodes);
+	$(agendaetudiantEdt.selectorMenu).append(element);
+	agendaetudiantEdt.wait.stop('tree');
 }
 
-function showCalendar(id)
+agendaetudiantEdt.showCalendar = function(id)
 {
-// 	wait.start('menu');
-// 	$.getJSON(server + "/api/menu/7.jsonp?menu=?");
-	wait.start('edt');
-	myJson.get(id, server + "/api/edt/group/"+id+".jsonp", function(id, args){ edt(id, args);});
+	//agendaetudiantEdt.wait.start('menu');
+	//$.getJSON(agendaetudiantEdt.server + "/api/menu/7.jsonp?agendaetudiantEdt.menu=?");
+	agendaetudiantEdt.wait.start('edt');
+	agendaetudiantEdt.myJson.get(id, agendaetudiantEdt.server + "/api/edt/group/"+id+".jsonp", function(id, args){ agendaetudiantEdt.edt(id, args);});
 }
 
-function resetOldEvent()
+agendaetudiantEdt.resetOldEvent = function()
 {
-	if(oldEvent !== undefined)
+	if(agendaetudiantEdt.oldEvent !== undefined)
 	{
-		oldEvent.event.backgroundColor = oldEvent.backgroundColor;
-		oldEvent.event.textColor = oldEvent.textColor;
-		$(selectorCalendar).fullCalendar( 'rerenderEvents' );
+		agendaetudiantEdt.oldEvent.event.backgroundColor = agendaetudiantEdt.oldEvent.backgroundColor;
+		agendaetudiantEdt.oldEvent.event.textColor = agendaetudiantEdt.oldEvent.textColor;
+		$(agendaetudiantEdt.selectorCalendar).fullCalendar( 'rerenderEvents' );
 	}
 }
 
-function createOldEvent(event)
+agendaetudiantEdt.createOldEvent = function(event)
 {
-	oldEvent.event = event;
-	oldEvent.backgroundColor = event.backgroundColor;
-	oldEvent.textColor = event.textColor;
+	agendaetudiantEdt.oldEvent.event = event;
+	agendaetudiantEdt.oldEvent.backgroundColor = event.backgroundColor;
+	agendaetudiantEdt.oldEvent.textColor = event.textColor;
 }
 
-function popupEdt(data)
+agendaetudiantEdt.popupEdt = function(data)
 {
 	var start = new Date(data.start*1000);
 	var end = new Date(data.end*1000);
 	var html = '<ul>';
-	if(!empty(data.code))
+	if(!agendaetudiantEdt.empty(data.code))
 	{
 		html += '<li>Code : '+data.code+'</li>';
 	}
-	if(!empty(data.name))
+	if(!agendaetudiantEdt.empty(data.name))
 	{
 		html += '<li>Nom : '+data.name+'</li>';
 	}
-	html += '<li>De '+hoursMinutesFormat(start)+' à '+hoursMinutesFormat(end)+'</li>';
+	html += '<li>De '+agendaetudiantEdt.hoursMinutesFormat(start)+' à '+agendaetudiantEdt.hoursMinutesFormat(end)+'</li>';
 	if(data.type)
 	{
 		html += '<li>Type : '+data.type+'</li>';
 	}
-	if(!empty(data.teacher))
+	if(!agendaetudiantEdt.empty(data.teacher))
 	{
 		html += '<li>Professeur : '+data.teacher+'</li>';
 	}
-	if(!empty(data.place))
+	if(!agendaetudiantEdt.empty(data.place))
 	{
 		html += '<li>Salle : '+data.place+'</li>';
 	}
@@ -245,10 +237,10 @@ function popupEdt(data)
 		html += '<li>Cette salle dispose d\'un vidéo projecteur</li>';
 	}
 	html += '</ul>';
-	popup(html);
+	agendaetudiantEdt.popup(data.summary, html);
 }
 
-function empty (mixed_var)
+agendaetudiantEdt.empty = function(mixed_var)
 {
 	var undef, key, i, len;
 	var emptyValues = [undef, null, false, 0, "", "0"];
@@ -272,13 +264,13 @@ function empty (mixed_var)
 	return false;
 }
 
-function popupMenu(data)
+agendaetudiantEdt.popupMenu = function(data)
 {
 	var start = new Date(data.start*1000);
 	var end = new Date(data.end*1000);
 	var mealsLength = data.meals.length;
 	var html = '<ul>';
-	html += '<li>De '+hoursMinutesFormat(start)+' à '+hoursMinutesFormat(end)+'</li>';
+	html += '<li>De '+agendaetudiantEdt.hoursMinutesFormat(start)+' à '+agendaetudiantEdt.hoursMinutesFormat(end)+'</li>';
 	html += '<li>Menu :';
 	html +='<ul>';
 	for(var i =0; i<mealsLength; i++)
@@ -288,10 +280,10 @@ function popupMenu(data)
 	html += '</ul>';
 	html += '</li>';
 	html += '</ul>';
-	popup(html);
+	agendaetudiantEdt.popup(data.summary, html);
 }
 
-function hoursMinutesFormat(date)
+agendaetudiantEdt.hoursMinutesFormat = function(date)
 {
 	var hours = date.getHours();
 	var minutes = date.getMinutes();
@@ -300,31 +292,26 @@ function hoursMinutesFormat(date)
 	return hours+':'+minutes;
 }
 
-function popup(html)
+agendaetudiantEdt.popup = function(title, body)
 {
-	$("#popup").show();
-	$("#popup").html('<div class="pull-right"><a href="javascript:;" onclick="closePopup()" class="close" aria-hidden="true">&times;</a></div><div class="content">'+html+'</div>');
+	$("#popup .modal-title").text(title);
+	$("#popup .modal-body").html(body);
+	$('#popup').modal({});
 }
 
-function closePopup()
-{
-	$("#popup").hide();
-	resetOldEvent();
-}
-
-function waiting(name)
+agendaetudiantEdt.waiting = function(name)
 {
 	$("#waiting").append('<div class="_element ' + name +'"><span>Chargement en cours …</span></div>');
 }
 
-function stopWaiting(name)
+agendaetudiantEdt.stopWaiting = function(name)
 {
 	$("#waiting ." + name).remove();
 }
 
-function menu(data)
+agendaetudiantEdt.menu = function(data)
 {
-	$(selectorCalendar).fullCalendar( 'removeEvents', "menu");
+	$(agendaetudiantEdt.selectorCalendar).fullCalendar( 'removeEvents', "menu");
 	var length = data.data.length;
 	var element = null;
 	for(var i = 0; i< length; i++)
@@ -348,62 +335,61 @@ function menu(data)
 			color : "#000",
 			data : element
 		};
-		$(selectorCalendar).fullCalendar( 'renderEvent', event , true);
+		$(agendaetudiantEdt.selectorCalendar).fullCalendar( 'renderEvent', event , true);
 	}
-	wait.stop('menu');
+	agendaetudiantEdt.wait.stop('menu');
 }
 
-function addGroupButton(id, name)
+agendaetudiantEdt.addGroupButton = function(id, name)
 {
 	if (!$('#btn_edt_'+id).length ) {
 		var icsLink = Routing.generate('ics_edt_group', { id: id });
-		$(selectorGroups).append('<div id="btn_edt_'+id+'" class="ae-v-spacing btn-group btn-group-justified">\
+		$(agendaetudiantEdt.selectorGroups).append('<div id="btn_edt_'+id+'" class="ae-v-spacing btn-group btn-group-justified">\
 			<button type="button" title="'+name+'" class="btn btn-primary dropdown-toggle" style="display:block; width: 100%;" data-toggle="dropdown">\
 				<span class="ae-col-90-ellipsis">'+name+'</span> <span class="caret"></span>\
 			</button>\
 			<ul class="dropdown-menu" role="menu">\
 				<li><a href="' + icsLink + '">Récupérer le calendrier</a></li>\
 				<li class="divider"></li>\
-				<li><a href="javascript:;" onclick="removeButtonCalendar(\'edt\', '+id+')">Fermer</a></li>\
+				<li><a href="javascript:;" onclick="agendaetudiantEdt.removeButtonCalendar(\'edt\', '+id+')">Fermer</a></li>\
 			</ul>\
 		</div>');
 		
 	}
 }
 
-function removeButtonCalendar(classId, id)
+agendaetudiantEdt.removeButtonCalendar = function(classId, id)
 {
 	$('#btn_'+classId+'_'+id).remove();
-	removeCalendar(id);
+	agendaetudiantEdt.removeCalendar(classId, id);
 }
 
-function removeCalendar(classId, id)
+agendaetudiantEdt.removeCalendar = function(classId, id)
 {
-	setGroupId(id, false);
-	$(selectorCalendar).fullCalendar( 'removeEvents', classId + '_' + id);
+	agendaetudiantEdt.setGroupId(id, false);
+	$(agendaetudiantEdt.selectorCalendar).fullCalendar( 'removeEvents', classId + '_' + id);
 }
 
-function setGroupId(id, value)
+agendaetudiantEdt.setGroupId = function(id, value)
 {
+	
 	if(id !== undefined)
 	{
-		groupsId[id] = value;
-		putInStorage('agendaetudiant@groupsId',groupsId);
+		agendaetudiantEdt.groupsId[id] = value;
+		agendaetudiantEdt.putInStorage('agendaetudiant@groupsId',agendaetudiantEdt.groupsId);
 	}
 }
 
-function edt(id, data)
+agendaetudiantEdt.edt = function(id, data)
 {
-	removeCalendar("edt", id);
-	setGroupId(id, true);
+	agendaetudiantEdt.removeCalendar("edt", id);
+	agendaetudiantEdt.setGroupId(id, true);
 	var name = id;
-	console.log(id);
-	console.log(treeNodes);
-	if(treeNodes[id] !== undefined)
+	if(agendaetudiantEdt.treeNodes[id] !== undefined)
 	{
-		name = treeNodes[id].name;
+		name = agendaetudiantEdt.treeNodes[id].name;
 	}
-	addGroupButton(id, name);
+	agendaetudiantEdt.addGroupButton(id, name);
 	var length = data.data.length;
 	var element = null;
 	for(var i = 0; i< length; i++)
@@ -432,7 +418,7 @@ function edt(id, data)
 		}
 		
 		var summary = element.summary;
-		if(!empty(element.place))
+		if(!agendaetudiantEdt.empty(element.place))
 		{
 			summary += ' ('+element.place+')';
 		}
@@ -449,35 +435,7 @@ function edt(id, data)
 			color : "#000",
 			data : element
 		};
-		$(selectorCalendar).fullCalendar( 'renderEvent', event , true);
+		$(agendaetudiantEdt.selectorCalendar).fullCalendar( 'renderEvent', event , true);
 	}
-	wait.stop('edt');
-}
-
-/**
- * Cookies
- */
-function createCookie(name,value,days) {
-	if (days) {
-		var date = new Date();
-		date.setTime(date.getTime()+(days*24*60*60*1000));
-		var expires = "; expires="+date.toGMTString();
-	}
-	else var expires = "";
-	document.cookie = name+"="+value+expires+"; path=/";
-}
-
-function readCookie(name) {
-	var nameEQ = name + "=";
-	var ca = document.cookie.split(';');
-	for(var i=0;i < ca.length;i++) {
-		var c = ca[i];
-		while (c.charAt(0)==' ') c = c.substring(1,c.length);
-		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-	}
-	return null;
-}
-
-function eraseCookie(name) {
-	createCookie(name,"",-1);
+	agendaetudiantEdt.wait.stop('edt');
 }

@@ -27,7 +27,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/", name="agenda_index")
+     * @Route("/", name="agenda_index", options={"expose"=true})
      * @Route("/home")
      * @Template()
      */
