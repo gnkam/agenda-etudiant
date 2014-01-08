@@ -23,5 +23,3 @@
 ## Exemple
     curl -X GET '{URL_API}/edt/tree'
     curl -X GET '{URL_API}/edt/tree/trainee'
-
-
