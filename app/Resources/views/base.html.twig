@@ -12,11 +12,36 @@
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
 		<!-- Base theme -->
 		<link rel="stylesheet" href="{{ asset('stylesheets/base.css') }}">
+		<style>
+			.ae-snake{
+				background: red;
+				display: inline-block;
+			}
+			.ae-snake td{
+				height: 10px;
+				width: 10px;
+				border: 1px solid #333;
+			}
+			.ae-snake td.placement{
+				background: #000;
+			}
+			.ae-snake td.snake{
+				background: #fff;
+			}
+			.ae-snake td.pomme{
+				background: #f00;
+			}
+			#ae-snk{
+				text-align: center;
+				
+			}
+		</style>
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
 		<div id="waiting"></div>
+		<div id="modal"></div>
         {% block body %}{% endblock %}
         <div class="container">
 			<footer>
@@ -30,6 +55,7 @@
 		<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
 		<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
         <script src="{{ asset('javascripts/base.js') }}"></script>
+        <script src="{{ asset('javascripts/gnkam.js') }}"></script>
         {% endblock %}
     </body>
 </html>
