@@ -1,0 +1,12 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}{{ parent() }} - Documentation{% endblock %}
+
+{% block body %}
+{{ render(controller('EtudiantAgendaBundle:Default:menu', { 'active': 'agenda_api' })) }}
+<div class="container">
+	<article>
+		{{ html|raw }}
+	</article>
+</div>
+{% endblock %}

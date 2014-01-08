@@ -23,6 +23,8 @@ namespace Etudiant\AgendaBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Response;
+use dflydev\markdown\MarkdownParser;
 
 class DefaultController extends Controller
 {
@@ -86,5 +88,25 @@ class DefaultController extends Controller
     public function apiAction()
     {
         return array();
+    }
+    
+    /**
+    * @Route("/doc/{page}.{format}", requirements={"page" = ".+"})
+    * @Route("/doc/{page}", name="agenda_doc", requirements={"page" = ".+"}, defaults={"format" = "md"})
+    * @Template()
+    */
+    public function docAction($page, $format)
+    {
+		$doc = $this->get('kernel')->getRootDir() . '/../doc';
+		$path = $doc . '/' . $page . '.md';
+		if(!is_file($path))
+		{
+			throw $this->createNotFoundException('Cette page n\'existe pas');
+		}
+		$text = file_get_contents($path);
+		$markdownParser = new MarkdownParser();
+		$html = $markdownParser->transformMarkdown($text);
+		return array('html' => $html);
+		
     }
 }

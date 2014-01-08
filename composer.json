@@ -24,7 +24,8 @@
         "gnkam/base": "*@dev",
         "gnkw/symfony": "2.*",
         "sabre/vobject": "3.*",
-        "friendsofsymfony/jsrouting-bundle": "@stable"
+        "friendsofsymfony/jsrouting-bundle": "@stable",
+        "dflydev/markdown": "1.0.*"
     },
     "scripts": {
         "post-install-cmd": [
