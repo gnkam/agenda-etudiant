@@ -109,7 +109,7 @@ agendaetudiantEdt.initCalendar = function()
 			}else {
 				window.clearInterval(agendaetudiantEdt.timelineInterval);
 			}
-			agendaetudiantEdt.timelineInterval = window.setInterval(agendaetudiantEdt.setTimeline, 60000);
+			agendaetudiantEdt.timelineInterval = window.setInterval(agendaetudiantEdt.setTimeline, 3000);
 			try {
 				agendaetudiantEdt.setTimeline();
 			} catch(err) {}
