@@ -57,7 +57,7 @@ agendaetudiantEasterEgg.launch = function()
 	$('#modalSnake').on('hidden.bs.modal', function (e) {
 		agendaetudiantEasterEgg.listen = true;
 		agendaetudiantSnake.stop();
-	})
+	});
 	$('#modalSnake').modal();
 }
 

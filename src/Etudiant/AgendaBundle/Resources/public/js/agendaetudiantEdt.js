@@ -20,6 +20,7 @@
 var agendaetudiantEdt = agendaetudiantEdt || {};
 
 $(document).ready(function(){agendaetudiantEdt.main();});
+
 agendaetudiantEdt.server = Routing.generate('agenda_index');
 agendaetudiantEdt.selectorCalendar = "#calendar";
 agendaetudiantEdt.selectorMenu = "#menu";
@@ -117,6 +118,10 @@ agendaetudiantEdt.main = function()
 			agendaetudiantEdt.showCalendar(key);
 		}
 	}
+	
+	$('#popup').on('hidden.bs.modal', function (e) {
+		agendaetudiantEdt.resetOldEvent();
+	});
 }
 
 agendaetudiantEdt.receiveStorage = function()
@@ -402,7 +407,7 @@ agendaetudiantEdt.edt = function(id, data)
 		switch(element.type)
 		{
 			case 'cm' :
-				bgColor = "#f36";
+				bgColor = "#f63";
 				break;
 			case 'tp' :
 				bgColor = "#dd0";
