@@ -62,3 +62,30 @@ footer {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+.ae-fc-timeline:before{
+	content: '';
+	height: 1px;
+	width: 100%;
+	top: -1px;
+	position: absolute;
+	background-color: rgba(0,0,0,0.8);
+}
+.ae-fc-timeline:after{
+	content: '';
+	height: 2px;
+	width: 100%;
+	top: 1px;
+	position: absolute;
+	background-color: rgba(255, 255, 255, 0.2);
+}
+.ae-fc-timeline {
+    position: absolute;
+    left: 59px;
+    border: none;
+	height: 1px;
+	background-color: rgba(0,0,0,0.8);
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    z-index: 999;
+}

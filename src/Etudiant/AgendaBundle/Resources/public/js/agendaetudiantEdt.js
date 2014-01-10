@@ -30,6 +30,7 @@ agendaetudiantEdt.wait = new agendaetudiant.waiting('#waiting');
 agendaetudiantEdt.myJson = new agendaetudiant.jsonp();
 agendaetudiantEdt.treeNodes = {};
 agendaetudiantEdt.groupsId = {};
+agendaetudiantEdt.firstTimeline = false;
 
 agendaetudiantEdt.stripTrailingSlash = function(str) {
 	if(str.substr(-1) == '/') {
@@ -101,7 +102,18 @@ agendaetudiantEdt.initCalendar = function()
 			agenda: 'H:mm{ - H:mm}' // événements vue agenda
 		},
 		firstDay:0, // Lundi premier jour de la semaine
-		height: 650
+		height: 650,
+		viewDisplay: function(view) {
+			if(agendaetudiantEdt.firstTimeline){
+				agendaetudiantEdt.firstTimeline = false;
+			}else {
+				window.clearInterval(agendaetudiantEdt.timelineInterval);
+			}
+			agendaetudiantEdt.timelineInterval = window.setInterval(agendaetudiantEdt.setTimeline, 60000);
+			try {
+				agendaetudiantEdt.setTimeline();
+			} catch(err) {}
+		}
 	});
 }
 
@@ -443,4 +455,40 @@ agendaetudiantEdt.edt = function(id, data)
 		$(agendaetudiantEdt.selectorCalendar).fullCalendar( 'renderEvent', event , true);
 	}
 	agendaetudiantEdt.wait.stop('edt');
+}
+
+agendaetudiantEdt.setTimeline = function(view) {
+    var parentDiv = jQuery(".fc-agenda-slots:visible").parent();
+    var timeline = parentDiv.children(".ae-fc-timeline");
+    var curTime = new Date();
+    if (timeline.length == 0) { //if timeline isn't there, add it
+        timeline = jQuery("<hr>").addClass("ae-fc-timeline");
+        parentDiv.prepend(timeline);
+    }
+
+
+    var curCalView = jQuery("#calendar").fullCalendar('getView');
+    if (curCalView.visStart < curTime && curCalView.visEnd > curTime) {
+        timeline.show();
+    } else {
+        timeline.hide();
+        return;
+    }
+
+    var curSeconds = (curTime.getHours() * 60 * 60) + (curTime.getMinutes() * 60) + curTime.getSeconds();
+    var percentOfDay = curSeconds / 86400; //24 * 60 * 60 = 86400, # of seconds in a day
+    var topLoc = Math.floor(parentDiv.height() * percentOfDay);
+
+    timeline.css("top", topLoc + "px");
+
+    if (curCalView.name == "agendaWeek") { //week view, don't want the timeline to go the whole way across
+        var dayCol = jQuery(".fc-today:visible");
+        var left = dayCol.position().left + 1;
+        var width = dayCol.width()-2;
+        timeline.css({
+            left: left + "px",
+            width: width + "px"
+        });
+    }
+
 }
