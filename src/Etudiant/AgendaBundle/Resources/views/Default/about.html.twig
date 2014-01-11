@@ -64,43 +64,72 @@
 					</tr>
 					<tr>
 						<td>Base GNKam</td>
-						<td><a href="https://github.com/Gnuk/GNKam_Base.git" title="GNKam base">https://github.com/Gnuk/GNKam_Base.git</a></td>
+						<td><a href="https://github.com/gnkam/base.git" title="GNKam base">https://github.com/gnkam/base.git</a></td>
 						<td>gnkam/base</td>
 						<td>AGPL-V3</td>
 					</tr>
 					<tr>
 						<td>Emploi du temps GNKam</td>
-						<td><a href="https://github.com/Gnuk/GNKam_UnivSavoieEdt.git" title="GNKam Univ Savoie Edt">https://github.com/Gnuk/GNKam_UnivSavoieEdt.git</a></td>
+						<td><a href="https://github.com/gnkam/univ-savoie-edt.git" title="GNKam Univ Savoie Edt">https://github.com/gnkam/univ-savoie-edt.git</a></td>
 						<td>gnkam/univ-savoie-edt</td>
 						<td>AGPL-V3</td>
 					</tr>
 					<tr>
 						<td>Menu GNKam</td>
-						<td><a href="https://github.com/Gnuk/GNKam_UnivSavoieMenu.git" title="GNKam Univ Savoie Menu">https://github.com/Gnuk/GNKam_UnivSavoieMenu.git</a></td>
+						<td><a href="https://github.com/gnkam/univ-savoie-menu.git" title="GNKam Univ Savoie Menu">https://github.com/gnkam/univ-savoie-menu.git</a></td>
 						<td>gnkam/univ-savoie-menu</td>
 						<td>AGPL-V3</td>
 					</tr>
 					<tr class="danger">
 						<td>Autobus GNKam <span class="label label-primary">Bientôt</span></td>
-						<td><a href="https://github.com/Gnuk/GNKam_Autobus.git" title="GNKam Univ Savoie Autobus">https://github.com/Gnuk/GNKam_Autobus.git</a></td>
+						<td><a href="https://github.com/gnkam/autobus.git" title="GNKam Univ Savoie Autobus">https://github.com/gnkam/autobus.git</a></td>
 						<td>gnkam/autobus</td>
 						<td>AGPL-V3</td>
 					</tr>
 					<tr>
 						<td>GNKW Symfony</td>
-						<td><a href="https://github.com/Gnuk/GNKW_Symfony.git" title="GNKW Symfony">https://github.com/Gnuk/GNKW_Symfony.git</a></td>
+						<td><a href="https://github.com/gnkw/symfony.git" title="GNKW Symfony">https://github.com/gnkw/symfony.git</a></td>
 						<td>gnkw/symfony</td>
 						<td>AGPL-V3</td>
 					</tr>
 					<tr>
 						<td>GNKW base</td>
-						<td><a href="https://github.com/Gnuk/GNKW_Base.git" title="GNKW Base">https://github.com/Gnuk/GNKW_Base.git</a></td>
+						<td><a href="https://github.com/gnkw/base.git" title="GNKW Base">https://github.com/gnkw/base.git</a></td>
 						<td>gnkw/base</td>
 						<td>AGPL-V3</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
+	</article>
+	<article>
+		<h2>Installer l'application</h2>
+		<p>L'application est encore en <span class="label label-primary">version bêta</span>, c'est pourquoi, en attendant la <span class="label label-success">version 1.0</span>, vous devez l'installer en version de développement …</p>
+		<section>
+			<h3>Prérequis</h3>
+			<ul>
+				<li>PHP 5</li>
+				<li>Un serveur Web (Nginx ou Apache2 …)</li>
+				<li>L'archive phar composer : <code>curl -sS https://getcomposer.org/installer | php</code></li>
+			</ul>
+		</section>
+		<section>
+			<h3>L'application</h3>
+			<ul>
+				<li>Avec composer : <code>php composer.phar create-project gnkam/agenda-etudiant agenda-etudiant @dev</code></li>
+				<li>Avec git : <code>git clone https://github.com/gnkam/agenda-etudiant.git</code></li>
+			</ul>
+		</section>
+		<section>
+			<h3>Lancement</h3>
+			<p>Pour lancer votre projet, il faut suivre la même procédure qu'avec tout projet symfony <span class="label label-success">version 2</span> à partir de la racine de votre projet</p>
+			<ul>
+				<li>Vérifier que votre configuration ne comporte pas d'erreurs : <code>php app/check.php</code></li>
+				<li>Mise à jour à l'aide de l'archive composer : <code>php composer.phar update</code></li>
+				<li>Via votre navigateur web préféré, ouvrez votre projet <code>http://localhost/agenda-etudiant/web/app_dev.php</code></li>
+				<li><span class="label label-danger">Attention</span>, le lien dépend de l'endroit où vous avez mis le projet dans votre serveur web</li>
+			</ul>
+		</section>
 	</article>
 </div>
 {% endblock %}
