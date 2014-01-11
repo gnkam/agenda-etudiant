@@ -98,7 +98,7 @@ class ApiController extends Controller
     public function edtFormalizer($format, $update)
     {
 		# Cache link
-		$cacheLink = __DIR__ . '/../cache';
+		$cacheLink = $this->get('kernel')->getRootDir() . '/../data';
 		# Create cache dir if not exists
 		if(!is_dir($cacheLink))
 		{

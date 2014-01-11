@@ -43,7 +43,7 @@ class ApiController extends Controller
 		$id = intval($id);
 		
 		# Cache link
-		$cacheLink = __DIR__ . '/../cache';
+		$cacheLink = $this->get('kernel')->getRootDir() . '/../data';
 		
 		# Create cache dir if not exists
 		if(!is_dir($cacheLink))
