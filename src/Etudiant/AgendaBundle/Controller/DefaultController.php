@@ -24,7 +24,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
-use dflydev\markdown\MarkdownParser;
+use Parsedown;
 
 class DefaultController extends Controller
 {
@@ -104,8 +104,7 @@ class DefaultController extends Controller
 			throw $this->createNotFoundException('Cette page n\'existe pas');
 		}
 		$text = file_get_contents($path);
-		$markdownParser = new MarkdownParser();
-		$html = $markdownParser->transformMarkdown($text);
+		$html = Parsedown::instance()->parse($text);
 		return array('html' => $html);
 		
     }
