@@ -35,11 +35,34 @@ agendaetudiant.waiting = function(div)
 agendaetudiant.jsonpCallbacks = {cntr: 0};
 agendaetudiant.jsonp = function()
 {
-	this.get = function(id, url, fn) {
-	
+	this.get = function(id, url, fn, async) {
+		if(typeof async == 'undefined')
+		{
+			this.async = true;
+		}
+		else
+		{
+			this.async = async;
+		}
 		this.doJSONP =  function(url, callbackFuncName) {
 			var fullURL = url + "?" + callbackFuncName + '=?';
-			$.getJSON(fullURL);
+// 			$.getJSON(fullURL);
+			var ajaxJson =  {
+				dataType: "json",
+				url: fullURL,
+				async: this.async
+			};
+			if(async)
+			{
+				$.ajax(ajaxJson);
+			}
+			else
+			{
+				setTimeout(function(){
+					$.ajax(ajaxJson);
+				});
+			}
+			
 		}
 		// create a globally unique function name
 		var name = "fn" + agendaetudiant.jsonpCallbacks.cntr++;

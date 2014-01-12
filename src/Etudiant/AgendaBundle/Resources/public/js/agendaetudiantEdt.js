@@ -127,7 +127,7 @@ agendaetudiantEdt.main = function()
 	for (var key in agendaetudiantEdt.groupsId){
 		if(agendaetudiantEdt.groupsId[key])
 		{
-			agendaetudiantEdt.showCalendar(key);
+			agendaetudiantEdt.showCalendar(key, false);
 		}
 	}
 	
@@ -151,7 +151,7 @@ agendaetudiantEdt.select = function(selector){
 		var type = $(selector.options[selector.selectedIndex]).attr('datatype');
 		if(type == 'treeitem')
 		{
-			agendaetudiantEdt.showCalendar(value);
+			agendaetudiantEdt.showCalendar(value, true);
 		}
 		else{
 			agendaetudiantEdt.wait.start('tree');
@@ -198,12 +198,14 @@ agendaetudiantEdt.tree = function(d){
 	agendaetudiantEdt.wait.stop('tree');
 }
 
-agendaetudiantEdt.showCalendar = function(id)
+agendaetudiantEdt.showCalendar = function(id, async)
 {
-	//agendaetudiantEdt.wait.start('menu');
-	//$.getJSON(agendaetudiantEdt.server + "/api/menu/7.jsonp?agendaetudiantEdt.menu=?");
-	agendaetudiantEdt.wait.start('edt');
-	agendaetudiantEdt.myJson.get(id, agendaetudiantEdt.server + "/api/edt/group/"+id+".jsonp", function(id, args){ agendaetudiantEdt.edt(id, args);});
+	if(async == undefined)
+	{
+		async = true;
+	}
+	agendaetudiantEdt.wait.start('edt-'+id);
+	agendaetudiantEdt.myJson.get(id, agendaetudiantEdt.server + "/api/edt/group/"+id+".jsonp", function(id, args){ agendaetudiantEdt.edt(id, args);}, async);
 }
 
 agendaetudiantEdt.resetOldEvent = function()
@@ -454,7 +456,7 @@ agendaetudiantEdt.edt = function(id, data)
 		};
 		$(agendaetudiantEdt.selectorCalendar).fullCalendar( 'renderEvent', event , true);
 	}
-	agendaetudiantEdt.wait.stop('edt');
+	agendaetudiantEdt.wait.stop('edt-'+id);
 }
 
 agendaetudiantEdt.setTimeline = function(view) {
