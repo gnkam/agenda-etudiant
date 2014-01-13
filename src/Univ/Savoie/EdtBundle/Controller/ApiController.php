@@ -19,6 +19,7 @@
 */
 
 namespace Univ\Savoie\EdtBundle\Controller;
+use Univ\Savoie\EdtBundle\UnivSavoieEdtBundle;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -98,7 +99,8 @@ class ApiController extends Controller
     public function edtFormalizer($format, $update)
     {
 		# Cache link
-		$cacheLink = $this->get('kernel')->getRootDir() . '/../data';
+		$container = UnivSavoieEdtBundle::getContainer();
+		$cacheLink = $container->get('kernel')->getRootDir() . '/../data';
 		# Create cache dir if not exists
 		if(!is_dir($cacheLink))
 		{
