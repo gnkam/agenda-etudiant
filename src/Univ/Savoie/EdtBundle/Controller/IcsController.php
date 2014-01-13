@@ -43,7 +43,7 @@ class IcsController extends Controller
 	public function groupIdAction($id)
 	{
 		$api = new ApiController();
-		
+		$api->setContainer($this->container);
 		$group = $api->groupIdAction($id);
 		if($group->getStatusCode() !== 200)
 		{

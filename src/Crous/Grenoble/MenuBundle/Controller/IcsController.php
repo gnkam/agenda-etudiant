@@ -43,8 +43,9 @@ class IcsController extends Controller
 	public function menuIdAction($id)
 	{
 		$api = new ApiController();
-		
+		$api->setContainer($this->container);
 		$menu = $api->menuIdAction($id);
+		
 		if($menu->getStatusCode() !== 200)
 		{
 			return new Response('Calendar not found', 404);

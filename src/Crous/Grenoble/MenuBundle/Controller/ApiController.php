@@ -20,8 +20,6 @@
 
 namespace Crous\Grenoble\MenuBundle\Controller;
 
-use Crous\Grenoble\MenuBundle\CrousGrenobleMenuBundle;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Gnkw\Symfony\HttpFoundation\FormattedResponse;
 
@@ -44,10 +42,8 @@ class ApiController extends Controller
     {
 		$id = intval($id);
 		
-		
 		# Cache link
-		$container = CrousGrenobleMenuBundle::getContainer();
-		$cacheLink = $container->get('kernel')->getRootDir() . '/../data';
+		$cacheLink = $this->get('kernel')->getRootDir() . '/../data';
 		
 		# Create cache dir if not exists
 		if(!is_dir($cacheLink))
