@@ -58,6 +58,9 @@
 			<p>
 				{{ milestone.info.description }}
 			</p>
+			<p>
+				<strong>Date de sortie :</strong> {{ milestone.info.due_on|date("m/d/Y") }}
+			</p>
 			{% set progress = (milestone.info.closed_issues * 100) / (milestone.info.open_issues + milestone.info.closed_issues) %}
 			<div class="progress">
 				<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%">
@@ -66,7 +69,7 @@
 			</div>
 			{% for issue in milestone.issues %}
 			<p>
-				<a href="{{ issue.user.html_url }}"><img src="{{ issue.user.avatar_url }}" title="{{ issue.user.login }}"></a>
+				<a href="{{ issue.user.html_url }}"><img src="{{ issue.user.avatar_url }}" title="{{ issue.user.login }}" /></a>
 				<a href="{{ issue.html_url }}">{{ issue.title }}</a>
 					{% for label in issue.labels %}
 					<span class="label" style="background-color: #{{label.color}}; color: #000;">{{label.name}}</span>
