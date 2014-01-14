@@ -8,8 +8,8 @@ agendaetudiantEasterEgg.trueCombinaison = [
 	39,
 	37,
 	39,
-	65,
-	66
+	66,
+	65
 ];
 agendaetudiantEasterEgg.combinaison = [];
 agendaetudiantEasterEgg.listen = true;

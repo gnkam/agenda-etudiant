@@ -25,6 +25,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 use Parsedown;
+use Gnkw\Http\Rest\Client;
 
 class DefaultController extends Controller
 {
@@ -69,7 +70,25 @@ class DefaultController extends Controller
      */
     public function supportAction()
     {
-        return array();
+		$client = new Client("https://api.github.com");
+		$request = $client->get("/repos/gnkam/agenda-etudiant/issues");
+		$request->setHeaders(array(
+			"User-Agent: Gnkam-Agenda-Etudiant"
+		));
+		$resource = $request->getResource('json');
+		$json = $resource->json(true);
+		$milestones = array();
+		foreach($json as $issue) {
+			$milestoneId = $issue['milestone']['id'];
+			if(!isset($milestones[$milestoneId]))
+			{
+				$milestones[$milestoneId]['info'] = $issue['milestone'];
+				$milestones[$milestoneId]['issues'] = array();
+			}
+			$milestones[$milestoneId]['issues'][] = $issue;
+		}
+		
+        return array('milestones' => $milestones);
     }
     
     /**

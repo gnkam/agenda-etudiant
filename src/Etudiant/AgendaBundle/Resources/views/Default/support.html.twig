@@ -12,6 +12,7 @@
 		</div>
 	</article>
 	<article>
+		<h2>Résumé</h2>
 		<div class="table-responsive">
 			<table class="table table-condensed table-bordered">
 				<thead>
@@ -48,6 +49,35 @@
 				</tbody>
 			</table>
 		</div>
+	</article>
+	<article>
+		<h2>Progression</h2>
+		{% for milestone in milestones %}
+		<section>
+			<h3>{{ milestone.info.title }} <span class="badge">{{ milestone.info.open_issues }}</span></h3>
+			<p>
+				{{ milestone.info.description }}
+			</p>
+			{% set progress = (milestone.info.closed_issues * 100) / (milestone.info.open_issues + milestone.info.closed_issues) %}
+			<div class="progress">
+				<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%">
+					<span class="sr-only">{{ progress }}% Complete (milestone)</span>
+				</div>
+			</div>
+			{% for issue in milestone.issues %}
+			<p>
+				<a href="{{ issue.user.html_url }}"><img src="{{ issue.user.avatar_url }}" title="{{ issue.user.login }}"></a>
+				<a href="{{ issue.html_url }}">{{ issue.title }}</a>
+					{% for label in issue.labels %}
+					<span class="label" style="background-color: #{{label.color}}; color: #000;">{{label.name}}</span>
+					{% endfor %}
+					{% if issue.assignee is not null %}
+					assigné à <a href="{{ issue.assignee.html_url }}" title="{{ issue.assignee.login }}"><strong>{{ issue.assignee.login }}</strong></a>
+					{% endif %}
+			</p>
+			{% endfor %}
+		</section>
+		{% endfor %}
 	</article>
 </div>
 {% endblock %}
