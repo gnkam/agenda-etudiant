@@ -259,6 +259,20 @@ agendaetudiantEdt.popupEdt = function(data)
 	agendaetudiantEdt.popup(data.summary, html);
 }
 
+agendaetudiantEdt.popupICS = function(id)
+{
+	var icsLink = Routing.generate('ics_edt_group', { id: id });
+	var icsLinkAbsolute = Routing.generate('ics_edt_group', { id: id }, true);
+	var html = '<form class="form">\
+		<div class="form-group">\
+			<input type="text" name="url_ics"  class="form-control" value="'+icsLinkAbsolute+'" onclick="select();" />\
+		</div>\
+	</form>';
+	$("#icsPopup .modal-body .modal-body-content").html(html);
+	$("#icsPopup .modal-footer .download").attr('href', icsLink);
+	$('#icsPopup').modal({});
+}
+
 agendaetudiantEdt.empty = function(mixed_var)
 {
 	var undef, key, i, len;
@@ -362,13 +376,12 @@ agendaetudiantEdt.menu = function(data)
 agendaetudiantEdt.addGroupButton = function(id, name)
 {
 	if (!$('#btn_edt_'+id).length ) {
-		var icsLink = Routing.generate('ics_edt_group', { id: id });
 		$(agendaetudiantEdt.selectorGroups).append('<div id="btn_edt_'+id+'" class="ae-v-spacing btn-group btn-group-justified">\
 			<button type="button" title="'+name+'" class="btn btn-primary dropdown-toggle" style="display:block; width: 100%;" data-toggle="dropdown">\
 				<span class="ae-col-90-ellipsis">'+name+'</span> <span class="caret"></span>\
 			</button>\
 			<ul class="dropdown-menu" role="menu">\
-				<li><a href="' + icsLink + '">Récupérer le calendrier</a></li>\
+				<li><a href="javascript:;" onclick="agendaetudiantEdt.popupICS(\''+id+'\');">Récupérer le calendrier (ics)</a></li>\
 				<li class="divider"></li>\
 				<li><a href="javascript:;" onclick="agendaetudiantEdt.removeButtonCalendar(\'edt\', '+id+')">Fermer</a></li>\
 			</ul>\
@@ -401,6 +414,7 @@ agendaetudiantEdt.setGroupId = function(id, value)
 
 agendaetudiantEdt.edt = function(id, data)
 {
+	var currentTimestamp = new Date().getTime();
 	agendaetudiantEdt.removeCalendar("edt", id);
 	agendaetudiantEdt.setGroupId(id, true);
 	var name = id;
@@ -418,22 +432,46 @@ agendaetudiantEdt.edt = function(id, data)
 		var bgColor;
 		var fgColor = "#000";
 		
-		switch(element.type)
+		if(currentTimestamp>(element.end*1000))
 		{
-			case 'cm' :
-				bgColor = "#f63";
-				break;
-			case 'tp' :
-				bgColor = "#dd0";
-				break;
-			case 'td' :
-				bgColor = "#ad0";
-				break;
-			case 'projet' :
-				bgColor = "#e80";
-				break;
-			default:
-				bgColor = "#9cd";
+			var fgColor = "#555";
+			switch(element.type)
+			{
+				case 'cm' :
+					bgColor = "#eb8";
+					break;
+				case 'tp' :
+					bgColor = "#dd9";
+					break;
+				case 'td' :
+					bgColor = "#ac9";
+					break;
+				case 'projet' :
+					bgColor = "#db8";
+					break;
+				default:
+					bgColor = "#acd";
+			}
+		}
+		else
+		{
+			switch(element.type)
+			{
+				case 'cm' :
+					bgColor = "#f63";
+					break;
+				case 'tp' :
+					bgColor = "#dd0";
+					break;
+				case 'td' :
+					bgColor = "#ad0";
+					break;
+				case 'projet' :
+					bgColor = "#e80";
+					break;
+				default:
+					bgColor = "#9cd";
+			}
 		}
 		
 		var summary = element.summary;

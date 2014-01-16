@@ -89,3 +89,25 @@ footer {
     padding: 0;
     z-index: 999;
 }
+
+.ae-td-50-width {
+	width: 50px;
+}
+.ae-center {
+	text-align: center;
+}
+
+table tr.ae-tr-middle>th,
+table tr.ae-tr-middle>td
+{
+	vertical-align: middle;
+}
+
+.ae-img-border
+{
+	border: 1px solid #aaa;
+}
+a img.ae-img-border:hover
+{
+	border-color: #000;
+}

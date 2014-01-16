@@ -51,7 +51,7 @@
 		</div>
 	</article>
 	<article>
-		<h2>Progression</h2>
+		<h2>Tickets</h2>
 		{% for milestone in milestones %}
 		<section>
 			<h3>{{ milestone.info.title }} <span class="badge">{{ milestone.info.open_issues }}</span></h3>
@@ -67,18 +67,45 @@
 					<span class="sr-only">{{ progress }}% Complete (milestone)</span>
 				</div>
 			</div>
+			<table class="table table-bordered table-hover">
+				<thead>
+					<tr class="ae-tr-middle">
+						<th class="ae-td-50-width ae-center">Posté par</th>
+						<th class="ae-td-50-width ae-center">#</th>
+						<th>Ticket</th>
+						<th>Type</th>
+						<th class="ae-td-50-width ae-center">Assigné à</th>
+					</tr>
+				</thead>
+				<tbody>
 			{% for issue in milestone.issues %}
-			<p>
-				<a href="{{ issue.user.html_url }}"><img alt="{{ issue.user.login }}" src="{{ issue.user.avatar_url }}" title="{{ issue.user.login }}" /></a>
-				<a href="{{ issue.html_url }}">{{ issue.title }}</a>
+					<tr>
+						<td class="ae-td-50-width ae-center">
+							<a href="{{ issue.user.html_url }}"><img class="ae-img-border img-rounded" width="40px" height="40px" alt="{{ issue.user.login }}" src="{{ issue.user.avatar_url }}" title="{{ issue.user.login }}" /></a>
+						</td>
+						<td class="ae-td-50-width ae-center">
+							{{ issue.number }}
+						</td>
+						<td>
+							<a href="{{ issue.html_url }}">{{ issue.title }}</a>
+						</td>
+						<td>
 					{% for label in issue.labels %}
-					<span class="label" style="background-color: #{{label.color}}; color: #000;">{{label.name}}</span>
+							<span class="label" style="background-color: #{{label.color}}; color: #000;">{{label.name}}</span>
 					{% endfor %}
+						</td>
 					{% if issue.assignee is not null %}
-					assigné à <a href="{{ issue.assignee.html_url }}" title="{{ issue.assignee.login }}"><strong>{{ issue.assignee.login }}</strong></a>
+						<td class="ae-td-50-width ae-center">
+							<a href="{{ issue.assignee.html_url }}" title="{{ issue.assignee.login }}"><img class="ae-img-border img-rounded" width="40px" height="40px" src="{{ issue.assignee.avatar_url }}" alt="{{ issue.assignee.login }}" /></a>
+					{% else %}
+						<td class="ae-td-50-width ae-center danger">
+							<strong>-</strong>
 					{% endif %}
-			</p>
+						</td>
+					</tr>
 			{% endfor %}
+				</tbody>
+			</table>
 		</section>
 		{% endfor %}
 	</article>
