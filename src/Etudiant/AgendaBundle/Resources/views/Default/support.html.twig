@@ -59,7 +59,7 @@
 				{{ milestone.info.description }}
 			</p>
 			<p>
-				<strong>Date de sortie :</strong> {{ milestone.info.due_on|date("m/d/Y") }}
+				<strong>Date de sortie :</strong> {{ milestone.info.due_on|date("d/m/Y") }}
 			</p>
 			{% set progress = (milestone.info.closed_issues * 100) / (milestone.info.open_issues + milestone.info.closed_issues) %}
 			<div class="progress">
