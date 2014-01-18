@@ -4,7 +4,7 @@
 
 {% block body %}
 {{ render(controller('EtudiantAgendaBundle:Default:menu', { 'active': 'agenda_index' })) }}
-<div class="container">
+<div class="container ae-home">
 	<article>
 		<div class="jumbotron">
 			<h1>Agenda Étudiant</h1>
@@ -14,8 +14,13 @@
 	<article>
 		<div class="col-6 col-xs-12 col-sm-6 col-md-4 col-lg-3">
 			<h2>Emploi du temps</h2>
-			<p>C'est l'ensemble des emplois du temps de votre université, vous pouvez le consulter à tous moment et le synchroniser avec votre logiciel préféré (Google Agenda, iCal, Chandler …)</p>
-			<p><a class="btn btn-default" href="{{ path('agenda_edt') }}" role="button">Afficher &raquo;</a></p>
+			<p>
+				<a href="{{ path('agenda_edt') }}" class="ae-icon icon-edt">
+					<span class="ae-icon-text">
+						C'est l'ensemble des emplois du temps de votre université, vous pouvez le consulter à tous moment et le synchroniser avec votre logiciel préféré (Google Agenda, iCal, Chandler …)
+					</span>
+				</a>
+			</p>
 		</div>
 	</article>
 {#	<article>
@@ -28,24 +33,39 @@
 	<article>
 		<div class="col-6 col-xs-12 col-sm-6 col-md-4 col-lg-3">
 			<h2>Support</h2>
-			<p>Votre université n'est pas supportée par nos services, vous voulez avoir plus d'informations sur l'application …</p>
-			<p><a class="btn btn-default" href="{{ path('agenda_support') }}" role="button">En savoir plus &raquo;</a></p>
+			<p>
+				<a href="{{ path('agenda_support') }}" class="ae-icon icon-support">
+					<span class="ae-icon-text">
+						Votre université n'est pas supportée par nos services, vous voulez avoir plus d'informations sur l'application …
+					</span>
+				</a>
+			</p>
 		</div>
 	</article>
 	<div class="clearfix visible-sm"></div>
 	<article>
 		<div class="col-6 col-xs-12 col-sm-6 col-md-4 col-lg-3">
 			<h2>À propos</h2>
-			<p>Tout ce qu'il faut savoir sur l'application elle-même, ses services, son développement, ses licences …</p>
-			<p><a class="btn btn-default" href="{{ path('agenda_about') }}" role="button">Afficher &raquo;</a></p>
+			<p>
+				<a href="{{ path('agenda_about') }}" class="ae-icon icon-about">
+					<span class="ae-icon-text">
+						Tout ce qu'il faut savoir sur l'application elle-même, ses services, son développement, ses licences …
+					</span>
+				</a>
+			</p>
 		</div>
 	</article>
 	<div class="clearfix visible-md"></div>
 	<article>
 		<div class="col-6 col-xs-12 col-sm-6 col-md-4 col-lg-3">
 			<h2>Api</h2>
-			<p>Vous êtes développeur, vous souhaitez utiliser nos services, cette section décrit nos api pour vous …</p>
-			<p><a class="btn btn-default" href="{{ path('agenda_api') }}" role="button">Afficher &raquo;</a></p>
+			<p>
+				<a href="{{ path('agenda_api') }}" class="ae-icon icon-api">
+					<span class="ae-icon-text">
+						Vous êtes développeur, vous souhaitez utiliser nos services, cette section décrit nos api pour vous …
+					</span>
+				</a>
+			</p>
 		</div>
 	</article>
 </div>

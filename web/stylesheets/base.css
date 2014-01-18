@@ -111,3 +111,53 @@ a img.ae-img-border:hover
 {
 	border-color: #000;
 }
+
+.ae-icon{
+	display: inline-block;
+	height: 128px;
+	padding: 5px;
+	background-repeat: no-repeat;
+	background-position: center 0px;
+}
+.ae-icon .ae-icon-text{
+	display: block;
+	visibility: hidden;
+	color: #222;
+	text-align: justify;
+	min-height: 128px;
+}
+a.ae-icon .ae-icon-text,
+a.ae-icon
+{
+	text-decoration: none;
+}
+.ae-icon:hover .ae-icon-text{
+	visibility: visible;
+	background-color: rgba(255,255,255,.9);
+	border-radius: 5px;
+}
+
+.ae-icon:hover{
+	background-position: center -128px;
+}
+
+.icon-edt{
+	background-image: url("img/edt.png");
+}
+
+.icon-support{
+	background-image: url("img/support.png");
+}
+
+.icon-about{
+	background-image: url("img/about.png");
+}
+
+.icon-api{
+	background-image: url("img/api.png");
+}
+
+.ae-home h2
+{
+	text-align: center;
+}
