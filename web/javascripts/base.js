@@ -46,7 +46,6 @@ agendaetudiant.jsonp = function()
 		}
 		this.doJSONP =  function(url, callbackFuncName) {
 			var fullURL = url + "?" + callbackFuncName + '=?';
-// 			$.getJSON(fullURL);
 			var ajaxJson =  {
 				dataType: "json",
 				url: fullURL,
@@ -60,7 +59,7 @@ agendaetudiant.jsonp = function()
 			{
 				setTimeout(function(){
 					$.ajax(ajaxJson);
-				});
+				}, 100);
 			}
 			
 		}
