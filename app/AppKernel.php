@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Crous\Grenoble\MenuBundle\CrousGrenobleMenuBundle(),
             new Etudiant\AgendaBundle\EtudiantAgendaBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            new Autobus\StacBundle\AutobusStacBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

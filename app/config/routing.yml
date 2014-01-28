@@ -1,3 +1,8 @@
+autobus_stac:
+    resource: "@AutobusStacBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 etudiant_agenda:
     resource: "@EtudiantAgendaBundle/Controller/"
     type:     annotation

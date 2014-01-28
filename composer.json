@@ -21,6 +21,7 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "gnkam/univ-savoie-edt": "*@dev",
         "gnkam/univ-savoie-menu": "*@dev",
+        "gnkam/autobus": "*@dev",
         "gnkam/base": "*@dev",
         "gnkw/symfony": "2.*",
         "sabre/vobject": "3.*",
