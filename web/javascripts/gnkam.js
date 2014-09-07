@@ -197,14 +197,22 @@ agendaetudiantSnake.move = function()
 agendaetudiantSnake.checkCollisions = function()
 {
 	// Bord de l'écran
-	if(agendaetudiantSnake.snake[0].i < 0 ||
-			agendaetudiantSnake.snake[0].j < 0 ||
-			agendaetudiantSnake.snake[0].i >= agendaetudiantSnake.lines ||
-			agendaetudiantSnake.snake[0].j >= agendaetudiantSnake.columns
-	)
-	{
-		agendaetudiantSnake.gameover();
-	}
+    if(agendaetudiantSnake.snake[0].i < 0)
+    {
+        agendaetudiantSnake.snake[0].i = agendaetudiantSnake.lines - 1;
+    }
+    if(agendaetudiantSnake.snake[0].j < 0)
+    {
+        agendaetudiantSnake.snake[0].j = agendaetudiantSnake.columns -1;
+    }
+    if(agendaetudiantSnake.snake[0].i >= agendaetudiantSnake.lines)
+    {
+        agendaetudiantSnake.snake[0].i = 0;
+    }
+    if(agendaetudiantSnake.snake[0].j >= agendaetudiantSnake.columns)
+    {
+        agendaetudiantSnake.snake[0].j = 0;
+    }
 	agendaetudiantSnake.checkEatSnake();
 	agendaetudiantSnake.checkEatApple();
 }

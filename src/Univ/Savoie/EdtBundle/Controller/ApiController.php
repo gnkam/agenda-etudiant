@@ -38,7 +38,7 @@ class ApiController extends Controller
 	* @var integer
 	* @todo Find a way to get projectId
 	*/
-	private $projectId = 2;
+	private $projectId = 1;
 
     /**
      * @Route("/group/{id}.{format}")
