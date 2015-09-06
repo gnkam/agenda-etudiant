@@ -11,5 +11,7 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
 
-    locale:            en
+    gnkw_project_id:   1
+
+    locale:            fr
     secret:            ThisTokenIsNotSoSecretChangeIt

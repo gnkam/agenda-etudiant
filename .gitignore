@@ -13,3 +13,5 @@
 /data
 *.kdev4
 *~
+.idea
+*.iml
